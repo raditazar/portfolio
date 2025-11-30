@@ -4,15 +4,22 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="min-h-screen flex items-center pt-20 pb-20 overflow-hidden relative">
-      {/* Background gradient effects */}
-      <div className="absolute inset-0 bg-linear-to-br from-zinc-900/20 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0">
+        <img 
+          src="/assets/test.svg" 
+          alt="" 
+          className="w-full h-full object-cover object-right opacity-40 lg:opacity-60" 
+        />
+      </div>
+
+      <div className="absolute inset-0 bg-linear-to-br from-black via-transparent to-transparent pointer-events-none z-1" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none z-1" />
       
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-8 flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            {/* Headline */}
-            <h1 className="text-xl md:text-3xl xl:text-5xl font-bold tracking-tight leading-[1.05]">
+
+            <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]">
               <span className="block mb-2">Front-End Developer</span>
               <span className="block text-zinc-400">translating complex logic</span>
               <span className="block text-2xl md:text-3xl xl:text-4xl text-zinc-500 font-normal mt-4">
@@ -25,7 +32,7 @@ export default function Hero() {
 
             {/* Subheadline */}
             <div className="flex flex-col gap-6">
-              <p className="text-sm md:text-md text-zinc-400 max-w-2xl leading-relaxed">
+              <p className="text-base md:text-lg text-zinc-400 max-w-2xl leading-relaxed">
                 Based in <span className="text-white font-medium">Yogyakarta</span>. 
                 Interested in <span className="text-white font-medium">AI</span> and <span className="text-white font-medium">on-chain data</span>.
               </p>
@@ -102,7 +109,7 @@ export default function Hero() {
                     className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                     priority
                   />
-                  {/* Overlay gradient */}
+                  {/* Overlay linear */}
                   <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                 </div>
               </div>
