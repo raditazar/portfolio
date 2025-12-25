@@ -3,19 +3,19 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center pt-20 pb-20 overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0">
+    <section className="min-h-screen flex items-center pt-20 pb-20 relative">
+      <div className="absolute top-0 right-0 w-full h-[120%] pointer-events-none z-0">
         <img 
-          src="/assets/test.svg" 
+          src="/assets/hero.svg" 
           alt="" 
-          className="w-full h-full object-cover object-right opacity-40 lg:opacity-60" 
+          className="w-full h-full object-cover object-right-top opacity-40 lg:opacity-60" 
         />
       </div>
 
       <div className="absolute inset-0 bg-linear-to-br from-black via-transparent to-transparent pointer-events-none z-1" />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none z-1" />
       
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-10 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-8 flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
@@ -122,6 +122,8 @@ export default function Hero() {
           </div>
         </div>
       </div>
+        {/* <div className="pointer-events-none absolute bottom-0 left-0 w-full h-48 bg-linear-to-b from-transparent to-[#0B0F14]" /> */}
+
     </section>
   );
 }

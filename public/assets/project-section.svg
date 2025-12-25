@@ -1,0 +1,106 @@
+<svg
+  width="100%"
+  height="100%"
+  viewBox="0 0 1440 1600"
+  preserveAspectRatio="xMidYMid slice"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <clipPath id="rounded-project">
+      <rect x="0" y="0" width="1440" height="1600" rx="28" ry="28" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#rounded-project)">
+
+    <!-- ================= BASE DARK CANVAS ================= -->
+    <rect width="1440" height="1600" fill="#0B0F14" />
+
+    <!-- ================= TOP MICRO FLOW (HERO CONNECTOR) ================= -->
+    <path
+      fill="none"
+      stroke="#00ADB5"
+      stroke-width="2"
+      stroke-opacity="0.25"
+    >
+      <animate
+        attributeName="d"
+        dur="28s"
+        repeatCount="indefinite"
+        values="
+          M0 120 C280 80 520 100 820 120 C1100 140 1280 120 1440 100;
+          M0 140 C300 100 560 120 860 140 C1140 160 1300 140 1440 120;
+          M0 120 C280 80 520 100 820 120 C1100 140 1280 120 1440 100
+        "
+      />
+    </path>
+
+    <!-- ================= SUBTLE PLANES (VERY LIGHT) ================= -->
+    <path fill="#0F2E30" opacity="0.35">
+      <animate
+        attributeName="d"
+        dur="40s"
+        repeatCount="indefinite"
+        values="
+          M0 260 C360 220 680 260 980 340 C1200 400 1320 420 1440 400 V520 H0 Z;
+          M0 280 C380 240 700 280 1000 360 C1220 420 1340 440 1440 420 V540 H0 Z;
+          M0 260 C360 220 680 260 980 340 C1200 400 1320 420 1440 400 V520 H0 Z
+        "
+      />
+    </path>
+
+    <!-- ================= MID DETAIL LINES ================= -->
+    <path
+      d="M120 620 C420 580 720 620 980 700 C1180 760 1300 780 1440 760"
+      fill="none"
+      stroke="#7DE2E6"
+      stroke-width="1.5"
+      stroke-opacity="0.18"
+    />
+
+    <path
+      d="M0 700 C300 660 560 700 820 780 C1040 860 1240 900 1440 880"
+      fill="none"
+      stroke="#00ADB5"
+      stroke-width="1"
+      stroke-opacity="0.2"
+    />
+
+    <!-- ================= FIRST PROJECT TEXTURE ================= -->
+    <path fill="#0F2E30" opacity="0.5">
+      <animate
+        attributeName="d"
+        dur="46s"
+        repeatCount="indefinite"
+        values="
+          M0 760 C320 720 620 760 900 860 C1160 960 1280 1000 1440 980 V1120 H0 Z;
+          M0 780 C340 740 640 780 920 880 C1180 980 1300 1020 1440 1000 V1140 H0 Z;
+          M0 760 C320 720 620 760 900 860 C1160 960 1280 1000 1440 980 V1120 H0 Z
+        "
+      />
+    </path>
+
+    <!-- ================= SECOND PROJECT MICRO DEPTH ================= -->
+    <path
+      d="M200 1040 C520 1000 820 1040 1080 1120 C1220 1160 1320 1180 1440 1160"
+      fill="none"
+      stroke="#7DE2E6"
+      stroke-width="1"
+      stroke-opacity="0.15"
+    />
+
+    <path fill="#00ADB5" opacity="0.3">
+      <animate
+        attributeName="d"
+        dur="50s"
+        repeatCount="indefinite"
+        values="
+          M0 1120 C260 1080 520 1120 780 1200 C1020 1280 1200 1320 1440 1300 V1600 H0 Z;
+          M0 1140 C300 1100 560 1140 820 1220 C1040 1300 1220 1340 1440 1320 V1600 H0 Z;
+          M0 1120 C260 1080 520 1120 780 1200 C1020 1280 1200 1320 1440 1300 V1600 H0 Z
+        "
+      />
+    </path>
+
+  </g>
+</svg>
