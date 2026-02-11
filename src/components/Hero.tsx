@@ -1,40 +1,50 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import FloatingLines from "./FloatingLines";
+import CardSwap, { Card } from "./CardSwap";
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center pt-20 pb-20 relative">
-      <div className="absolute top-0 right-0 w-full h-[120%] pointer-events-none z-0">
-        <img 
-          src="/assets/hero.svg" 
-          alt="" 
-          className="w-full h-full object-cover object-right-top opacity-40 lg:opacity-60" 
+    <section className="min-h-screen flex items-center pt-20 pb-20 relative overflow-x-clip overflow-y-visible">
+      {/* Background FloatingLines */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <FloatingLines
+          enabledWaves={["middle", "top"]}
+          lineCount={4}
+          lineDistance={60}
+          bendRadius={5}
+          bendStrength={0}
+          interactive={true}
+          parallax={true}
         />
       </div>
 
-      <div className="absolute inset-0 bg-linear-to-br from-black via-transparent to-transparent pointer-events-none z-1" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none z-1" />
+      {/* Background Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-transparent to-transparent pointer-events-none z-0" />
+      <div className="absolute top-1/3 right-1/3 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none z-0" />
       
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-8 flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* Bottom fade for seamless transition */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0B0F14] pointer-events-none z-0" />
+      
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+        <div className="max-w-3xl">
+          <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
 
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]">
-              <span className="block mb-2">Front-End Developer</span>
-              <span className="block text-zinc-400">translating complex logic</span>
-              <span className="block text-2xl md:text-3xl xl:text-4xl text-zinc-500 font-normal mt-4">
-                - From AI models to blockchain -
+            <h1 className="text-3xl md:text-4xl xl:text-5xl font-bold tracking-tight leading-[1.3]">
+              <span className="block mb-2 text-white">Front-End Developer</span>
+              <span className="block text-zinc-300 mb-3">
+                focused on <span className="text-blue-400">Machine Learning</span>
               </span>
-              <span className="block mt-4 bg-linear-to-r from-white via-zinc-300 to-zinc-500 bg-clip-text text-transparent">
-                into clean, accessible, and functional user interfaces.
+              <span className="block text-zinc-300">
+                building <span className="text-purple-400">user interfaces</span>
               </span>
             </h1>
 
             {/* Subheadline */}
-            <div className="flex flex-col gap-6">
-              <p className="text-base md:text-lg text-zinc-400 max-w-2xl leading-relaxed">
-                Based in <span className="text-white font-medium">Yogyakarta</span>. 
-                Interested in <span className="text-white font-medium">AI</span> and <span className="text-white font-medium">on-chain data</span>.
+            <div className="flex flex-col gap-5">
+              <p className="text-base md:text-lg text-zinc-500 max-w-xl leading-relaxed">
+                Based in <span className="text-white font-semibold">Yogyakarta</span>. 
+                Building ML-powered interfaces and <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent font-semibold">on-chain applications</span>.
               </p>
 
               {/* Social Links */}
@@ -43,10 +53,10 @@ export default function Hero() {
                   href="https://github.com/raditazar"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-3 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800/80 hover:border-zinc-700 transition-all duration-300"
+                  className="group relative p-3 rounded-xl border border-zinc-700/50 bg-zinc-900/80 hover:bg-zinc-800/80 hover:border-purple-500/50 transition-all duration-300"
                 >
                   <svg
-                    className="w-6 h-6 text-zinc-400 group-hover:text-white transition-colors"
+                    className="w-6 h-6 text-zinc-300 group-hover:text-purple-400 transition-colors"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -64,10 +74,10 @@ export default function Hero() {
                   href="https://www.linkedin.com/in/raditya-azhar-ananta"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-3 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800/80 hover:border-zinc-700 transition-all duration-300"
+                  className="group relative p-3 rounded-xl border border-zinc-700/50 bg-zinc-900/80 hover:bg-zinc-800/80 hover:border-blue-500/50 transition-all duration-300"
                 >
                   <svg
-                    className="w-6 h-6 text-zinc-400 group-hover:text-white transition-colors"
+                    className="w-6 h-6 text-zinc-300 group-hover:text-blue-400 transition-colors"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -83,9 +93,9 @@ export default function Hero() {
 
                 <Link
                   href="mailto:raditazar@example.com"
-                  className="group relative px-6 py-3 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-white hover:border-white transition-all duration-300"
+                  className="group relative px-6 py-3 rounded-xl border border-zinc-700/50 bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 hover:border-purple-500/50 transition-all duration-300"
                 >
-                  <span className="text-sm font-medium text-zinc-400 group-hover:text-black transition-colors">
+                  <span className="text-sm font-medium bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                     Get in touch
                   </span>
                 </Link>
@@ -93,37 +103,31 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Profile Image */}
-          <div className="lg:col-span-4 flex justify-center lg:justify-end relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
-            <div className="relative group">
-              {/* Glow effect */}
-              <div className="absolute -inset-1 bg-linear-to-r from-zinc-600 to-zinc-800 rounded-3xl blur-2xl opacity-25 group-hover:opacity-40 transition-opacity duration-500" />
-              
-              {/* Image container */}
-              <div className="relative w-[300px] h-[400px] lg:w-[350px] lg:h-[480px] xl:w-[400px] xl:h-[520px]">
-                <div className="relative w-full h-full rounded-3xl overflow-hidden border border-zinc-800 group-hover:border-zinc-700 transition-colors duration-500">
-                  <Image
-                    src="/images/profile.JPG"
-                    alt="Raditazar Profile Picture"
-                    fill
-                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-                    priority
-                  />
-                  {/* Overlay linear */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                </div>
-              </div>
-
-              {/* Floating badge */}
-              <div className="absolute -bottom-4 -right-4 px-4 py-2 rounded-xl border border-zinc-800 bg-black/80 backdrop-blur-md">
-                <p className="text-sm font-medium">Based in YK 🇮🇩</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-        {/* <div className="pointer-events-none absolute bottom-0 left-0 w-full h-48 bg-linear-to-b from-transparent to-[#0B0F14]" /> */}
 
+      {/* CardSwap - absolute bottom-right, bleeds down & clips right */}
+      <div className="hidden lg:block absolute -bottom-16 right-0 z-30" style={{ transform: 'translateY(45%)' }}>
+        {/* Glow effect */}
+        <div className="absolute -inset-16 bg-gradient-to-l from-purple-600/15 via-blue-600/10 to-transparent rounded-3xl blur-3xl opacity-60 pointer-events-none" />
+        
+        <div className="relative" style={{ marginRight: '-15px' }}>
+          <CardSwap
+            width={650}
+            height={500}
+            cardDistance={55}
+            verticalDistance={65}
+            delay={4000}
+            pauseOnHover={false}
+            skewAmount={5}
+            easing="elastic"
+          >
+            <Card customClass="profile-card" />
+            <Card customClass="profile-card" />
+            <Card customClass="profile-card" />
+          </CardSwap>
+        </div>
+      </div>
     </section>
   );
 }

@@ -4,23 +4,11 @@ import Link from "next/link";
 export default function Projects() {
     return (
         <section id="work" className="relative py-32 text-white overflow-visible">
-            {/* SVG Background */}
-            <div className="absolute inset-0 w-full h-full z-0">
-                <img 
-                    src="/assets/project-section.svg" 
-                    alt="" 
-                    className="w-full h-full object-cover opacity-90" 
-                    style={{ minHeight: '100%' }}
-                />
-            </div>
             <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-transparent via-transparent to-[#0B0F14]/80 z-[1]" />
 
-            {/* Gradient Overlay untuk smooth transition dari hero */}
-            {/* <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-black/80 via-[#0B0F14] to-transparent z-1" /> */}
-
             {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 ">
-                <h2 className="text-3xl md:text-5xl font-bold mb-20 text-gray-200">
+            <div className="relative z-10 max-w-7xl mx-auto px-6">
+                <h2 className="text-3xl md:text-5xl font-bold mb-20 text-white">
                     Selected Work
                 </h2>
                 <div className="flex flex-col gap-32">
