@@ -1,34 +1,55 @@
-import Link from 'next/link'
+"use client"
+
+import CardNav from './CardNav'
+import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
 export default function Navbar() {
-    return(
-        <nav className='fixed top-0 left-0 right-0 z-50  bg-red/50 backdrop-blur-lg'>
-            <div className='max-w-7xl mx-auto px-6 h-20 flex justify-between items-center'>
-                <Link href="/" className='text-xl font-bold tracking-tight text-white'>
-                    Raditazar
-                </Link>
+    const items = [
+        {
+            label: 'Projects',
+            bgColor: '#0d0716',
+            textColor: '#FFFFFF',
+            links: [
+                { label: "Featured", ariaLabel: "Featured Projects", href: "/projects" },
+                { label: "All Projects", ariaLabel: "All Projects", href: "/projects?tab=all" },
+            ]
+        },
+        {
+            label: 'About',
+            bgColor: '#170D27',
+            textColor: '#FFFFFF',
+            links: [
+                { label: "Career", ariaLabel: "About Career", href: "/about" },
+                { label: "Me", ariaLabel: "About Me", href: "/about?tab=me" },
+            ]
+        },
+        {
+            label: 'Contact',
+            bgColor: '#271e37',
+            textColor: '#FFFFFF',
+            links: [
+                { label: "Email", ariaLabel: "Email me", href: "#contact" },
+                { label: "Github", ariaLabel: "Github profile", href: "https://github.com/raditazar" },
+                { label: "LinkedIn", ariaLabel: "LinkedIn profile", href: "https://www.linkedin.com/in/raditya-azhar-ananta" },
+            ]
+        },
+    ]
 
-                <div className='flex items-center gap-8'>
-                    <Link 
-                        href="#work"
-                        className='text-sm font-semibold text-gray-400 hover:text-white transition-colors'
-                    >
-                        Work
-                    </Link>
-                    <Link 
-                        href="#about"
-                        className='text-sm font-semibold text-gray-400 hover:text-white transition-colors'
-                    >
-                        About
-                    </Link>
-                    <Link 
-                        href="#contact"
-                        className='text-sm font-semibold text-gray-400 hover:text-white transition-colors'
-                    >
-                        Contact
-                    </Link>
-                </div>
-            </div>
-        </nav>
+    return (
+        <CardNav
+            logo="/assets/dark_logo.png"
+            logoAlt="Raditazar Logo"
+            items={items}
+            baseColor='#fff'
+            menuColor='#000'
+            buttonBgColor='#111'
+            buttonTextColor='#fff'
+            ease='power3.out'
+            rightSlot={
+                <AnimatedThemeToggler
+                    className="p-2 rounded-lg hover:bg-black/10 transition-colors"
+                />
+            }
+        />
     )
 }

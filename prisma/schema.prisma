@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  category      String
+  categoryColor String   @default("text-blue-400")
+  techStack     String[]
+  imageSrc      String
+  imageAlt      String
+  liveUrl       String?
+  githubUrl     String?
+  caseStudyUrl  String?
+  isFeatured    Boolean  @default(false)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CareerEntry {
+  id           String   @id @default(cuid())
+  type         String   // "work" or "education"
+  title        String
+  organization String
+  description  String?
+  startDate    String
+  endDate      String?
+  isCurrent    Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AboutInfo {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}

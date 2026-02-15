@@ -122,7 +122,15 @@ export default function Hero() {
             skewAmount={5}
             easing="elastic"
           >
-            <Card customClass="profile-card" />
+            <Card customClass="profile-card" >
+              <Image
+                src="/images/IMG_8407.JPG"
+                alt="Profile Card"
+                width={650}
+                height={500}
+                className="rounded-2xl shadow-xl"
+              />
+            </Card>
             <Card customClass="profile-card" />
             <Card customClass="profile-card" />
           </CardSwap>

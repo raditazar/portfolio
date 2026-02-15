@@ -5,10 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  background-color: #050505;
-  color: #ffffff;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.985 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -39,6 +37,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Portfolio custom colors */
+  --portfolio-bg: #f5f5f7;
+  --portfolio-text: #1a1a2e;
+  --portfolio-text-muted: #64748b;
+  --portfolio-card-bg: #ffffff;
+  --portfolio-card-border: #e2e8f0;
+  --portfolio-section-bg: #f0f0f3;
 }
 
 ::selection {
@@ -200,6 +206,14 @@ html {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Portfolio dark custom colors */
+  --portfolio-bg: #0B0F14;
+  --portfolio-text: #ffffff;
+  --portfolio-text-muted: #a1a1aa;
+  --portfolio-card-bg: #111827;
+  --portfolio-card-border: rgba(255, 255, 255, 0.1);
+  --portfolio-section-bg: #0d1117;
 }
 
 @layer base {
@@ -209,4 +223,34 @@ html {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+/* Admin form inputs */
+.admin-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: rgb(39 39 42); /* zinc-800 */
+  border: 1px solid rgb(63 63 70); /* zinc-700 */
+  color: white;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  outline: none;
+}
+.admin-input::placeholder {
+  color: rgb(113 113 122); /* zinc-500 */
+}
+.admin-input:focus {
+  ring: 2px;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px rgb(168 85 247); /* purple-500 */
+}
+.admin-input option {
+  background-color: rgb(39 39 42);
+  color: white;
 }
