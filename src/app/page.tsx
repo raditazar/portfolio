@@ -11,42 +11,18 @@ import prisma from "@/lib/prisma";
 
 async function getHomeData() {
   try {
-    const [projects, aboutInfos, settings] = await Promise.all([
+    const [projects, allProjectCount] = await Promise.all([
       prisma.project.findMany({
         where: { isFeatured: true },
         orderBy: { order: "asc" },
         take: 4,
       }),
-      prisma.aboutInfo.findMany(),
-      prisma.siteSetting.findMany(),
+      prisma.project.count(),
     ]);
-
-    const infoMap = Object.fromEntries(aboutInfos.map((i) => [i.key, i.value]));
 
     return {
       projects,
-      technologies: infoMap.technologies?.split(",") || [
-        "JavaScript",
-        "TypeScript",
-        "React & Next.js",
-        "Tailwind CSS",
-        "Wagmi",
-        "Solidity",
-        "Python",
-        "Figma",
-      ],
-      stats: {
-        years: infoMap.stat_years || "2+",
-        projects: infoMap.stat_projects || "10+",
-        technologies: infoMap.stat_technologies || "8+",
-      },
-      currentlyExploring: {
-        title: infoMap.currently_exploring_title || "AI & Machine Learning Bootcamp",
-        description:
-          infoMap.currently_exploring_desc ||
-          "Deep diving into LLMs and integrating Vercel AI SDK with Next.js.",
-        progress: parseInt(infoMap.currently_exploring_progress || "66"),
-      },
+      totalProjectCount: allProjectCount,
     };
   } catch {
     // Fallback data when DB is not available
@@ -107,23 +83,7 @@ async function getHomeData() {
           updatedAt: new Date(),
         },
       ],
-      technologies: [
-        "JavaScript (ES6+)",
-        "TypeScript",
-        "React & Next.js",
-        "Tailwind CSS",
-        "Wagmi",
-        "Solidity",
-        "Python",
-        "Figma",
-      ],
-      stats: { years: "2+", projects: "10+", technologies: "8+" },
-      currentlyExploring: {
-        title: "AI & Machine Learning Bootcamp",
-        description:
-          "Deep diving into Large Language Models and integrating Vercel AI SDK with Next.js.",
-        progress: 66,
-      },
+      totalProjectCount: 4,
     };
   }
 }
@@ -132,7 +92,7 @@ export default async function Home() {
   const data = await getHomeData();
 
   return (
-    <main className="min-h-screen bg-[var(--portfolio-bg)] dark:bg-[#0B0F14] text-[var(--portfolio-text)] dark:text-white selection:bg-white selection:text-black overflow-x-clip relative">
+    <main className="min-h-screen bg-[#0B0F14] text-white selection:bg-white selection:text-black overflow-x-clip relative">
       {/* Background LightRays */}
       <HomeLightRays />
 
@@ -142,11 +102,9 @@ export default async function Home() {
         <HomeLogoLoop />
         <HomeBento
           projects={data.projects}
-          technologies={data.technologies}
-          stats={data.stats}
-          currentlyExploring={data.currentlyExploring}
+          totalProjectCount={data.totalProjectCount}
         />
-        <About />
+        <About stats={{ projects: data.totalProjectCount, technologies: 12 }} />
         <Footer />
       </div>
     </main>

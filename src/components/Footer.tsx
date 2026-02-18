@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import HomeLightRays from './HomeLightRays'
 
 export default function Footer() {
     return(
-        <footer id='contact' className='bg-black text-white pt-32 pb-10 border-t border-white/10'>
-            <div className='max-w-7xl mx-auto px-6'>
+        <footer id='contact' className='relative text-white pt-32 pb-10 overflow-hidden'>
+            <HomeLightRays />
+            <div className='relative z-10 max-w-7xl mx-auto px-6'>
                 <div className='mb-24'>
                     <p className='text-2xl md:text-3xl text-gray-400 mb-8'>
                         Have an idea? Ready to collaborate?

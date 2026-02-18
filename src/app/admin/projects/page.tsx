@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import DeleteProjectButton from "./DeleteProjectButton";
 
 export const dynamic = "force-dynamic";
 
@@ -105,7 +106,7 @@ export default async function AdminProjectsPage() {
                       >
                         Edit
                       </Link>
-                      <DeleteButton id={project.id} />
+                      <DeleteProjectButton id={project.id} />
                     </div>
                   </td>
                 </tr>
@@ -118,26 +119,3 @@ export default async function AdminProjectsPage() {
   );
 }
 
-function DeleteButton({ id }: { id: string }) {
-  return (
-    <form
-      action={async () => {
-        "use server";
-        const { prisma: db } = await import("@/lib/prisma");
-        await db.project.delete({ where: { id } });
-        const { revalidatePath } = await import("next/cache");
-        revalidatePath("/admin/projects");
-      }}
-    >
-      <button
-        type="submit"
-        className="px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs transition-colors"
-        onClick={(e) => {
-          if (!confirm("Delete this project?")) e.preventDefault();
-        }}
-      >
-        Delete
-      </button>
-    </form>
-  );
-}

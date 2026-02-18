@@ -199,28 +199,6 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
         </div>
       </div>
 
-      {/* Technologies */}
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <h3 className="text-sm font-bold tracking-widest uppercase text-zinc-500">
-            Technologies I work with
-          </h3>
-          <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {aboutInfo.technologies.map((tech) => (
-            <div
-              key={tech}
-              className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300"
-            >
-              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                {tech}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-zinc-200 dark:border-zinc-800/50">
         <div className="space-y-2">

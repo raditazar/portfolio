@@ -1,8 +1,16 @@
-export default function About() {
+interface AboutProps {
+  stats: {
+    projects: number;
+    technologies: number;
+  };
+}
+
+export default function About({ stats }: AboutProps) {
+  const yearsExp = new Date().getFullYear() - 2024;
   return (
     <section
       id="about"
-      className="relative py-32 bg-black text-white border-t border-white/10 overflow-hidden"
+      className="relative py-32 text-white overflow-hidden"
     >
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-zinc-900/50 rounded-full blur-3xl pointer-events-none" />
@@ -70,59 +78,18 @@ export default function About() {
               </div>
             </div>
 
-            {/* Technologies Section */}
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500">
-              <div className="flex items-center gap-3 mb-8">
-                <h3 className="text-sm font-bold tracking-widest uppercase text-zinc-500">
-                  Technologies I work with
-                </h3>
-                <div className="flex-1 h-px bg-linear-to-r from-zinc-800 to-transparent" />
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {[
-                  "JavaScript (ES6+)",
-                  "TypeScript",
-                  "React & Next.js",
-                  "Tailwind CSS",
-                  "Wagmi",
-                  "Solidity",
-                  "Python",
-                  "Figma",
-                ].map((tech, index) => (
-                  <div
-                    key={tech}
-                    className="group/tech relative p-4 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-300 cursor-default animate-in fade-in slide-in-from-bottom-4"
-                    style={{
-                      animationDelay: `${600 + index * 75}ms`,
-                      animationDuration: '500ms'
-                    }}
-                  >
-                    {/* Hover glow */}
-                    <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover/tech:opacity-5 transition-opacity duration-300" />
-                    
-                    <div className="relative">
-                      <span className="text-sm font-medium text-zinc-300 group-hover/tech:text-white transition-colors">
-                        {tech}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Stats Section */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-zinc-800/50 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700">
               <div className="space-y-2">
-                <p className="text-3xl md:text-4xl font-bold text-white">2+</p>
+                <p className="text-3xl md:text-4xl font-bold text-white">{yearsExp}+</p>
                 <p className="text-sm text-zinc-500">Years Experience</p>
               </div>
               <div className="space-y-2">
-                <p className="text-3xl md:text-4xl font-bold text-white">10+</p>
+                <p className="text-3xl md:text-4xl font-bold text-white">{stats.projects}</p>
                 <p className="text-sm text-zinc-500">Projects Completed</p>
               </div>
               <div className="space-y-2">
-                <p className="text-3xl md:text-4xl font-bold text-white">8+</p>
+                <p className="text-3xl md:text-4xl font-bold text-white">{stats.technologies}</p>
                 <p className="text-sm text-zinc-500">Technologies</p>
               </div>
             </div>

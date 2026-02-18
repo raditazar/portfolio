@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import BentoGrid, { BentoCardData } from "./BentoGrid";
 
 interface Project {
@@ -19,24 +18,16 @@ interface Project {
 
 interface HomeBentoProps {
   projects: Project[];
-  technologies: string[];
-  stats: { years: string; projects: string; technologies: string };
-  currentlyExploring: {
-    title: string;
-    description: string;
-    progress: number;
-  };
+  totalProjectCount?: number;
 }
 
 export default function HomeBento({
   projects,
-  technologies,
-  stats,
-  currentlyExploring,
+  totalProjectCount,
 }: HomeBentoProps) {
   const cards: BentoCardData[] = [
-    // Project cards
-    ...projects.slice(0, 3).map((project, idx) => ({
+    // Project cards (up to 3)
+    ...projects.slice(0, 3).map((project) => ({
       id: `project-${project.id}`,
       color: "#060010",
       label: project.category,
@@ -45,7 +36,7 @@ export default function HomeBento({
       href: project.liveUrl || project.githubUrl || "/projects",
       content: (
         <div className="flex flex-col h-full relative group">
-          <div className="absolute inset-0 rounded-[20px] overflow-hidden">
+          <div className="absolute inset-0 rounded-4xl overflow-hidden">
             <Image
               src={project.imageSrc}
               alt={project.imageAlt}
@@ -82,81 +73,48 @@ export default function HomeBento({
       ),
     })),
 
-    // Currently Exploring card
+    // CTA — View All Projects
     {
-      id: "currently-exploring",
-      color: "#0a0015",
+      id: "view-all-cta",
+      color: "#07000f",
+      href: "/projects",
       content: (
-        <div className="flex flex-col h-full p-1">
-          <span className="text-xs font-bold tracking-widest uppercase text-purple-400 mb-3">
-            Currently Exploring
-          </span>
-          <h3 className="text-base font-bold text-white mb-2">
-            {currentlyExploring.title}
-          </h3>
-          <p className="text-xs text-zinc-400 line-clamp-3 mb-4">
-            {currentlyExploring.description}
-          </p>
-          <div className="mt-auto flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-1000"
-                style={{ width: `${currentlyExploring.progress}%` }}
-              />
-            </div>
-            <span className="text-[10px] font-medium text-zinc-500">
-              {currentlyExploring.progress}%
+        <div className="flex flex-col h-full p-1 justify-between group">
+          {/* Top badge */}
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/8 border border-white/10 text-zinc-400">
+              Portfolio
             </span>
+            {totalProjectCount && totalProjectCount > 3 && (
+              <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-purple-500/15 border border-purple-500/20 text-purple-400">
+                +{totalProjectCount - 3} more
+              </span>
+            )}
           </div>
-        </div>
-      ),
-    },
 
-    // Tech Stack card
-    {
-      id: "tech-stack",
-      color: "#050510",
-      href: "/about?tab=me",
-      content: (
-        <div className="flex flex-col h-full p-1">
-          <span className="text-xs font-bold tracking-widest uppercase text-cyan-400 mb-3">
-            Tech Stack
-          </span>
-          <div className="grid grid-cols-2 gap-1.5 mt-auto">
-            {technologies.slice(0, 8).map((tech) => (
-              <div
-                key={tech}
-                className="px-2 py-1.5 text-[11px] font-medium text-zinc-300 bg-white/5 rounded-lg border border-white/5 text-center truncate"
-              >
-                {tech}
+          {/* Main content */}
+          <div className="mt-auto">
+            <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">
+              See everything I&apos;ve built
+            </p>
+            <div className="flex items-end justify-between">
+              <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight max-w-[70%]">
+                View All Projects
+              </h3>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-all duration-300">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="text-zinc-400 group-hover:text-purple-300 transition-colors duration-300 -rotate-45"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
               </div>
-            ))}
-          </div>
-        </div>
-      ),
-    },
-
-    // Stats card
-    {
-      id: "stats",
-      color: "#0d0008",
-      href: "/about",
-      content: (
-        <div className="flex flex-col h-full p-1 justify-center">
-          <div className="grid grid-cols-1 gap-4">
-            <div>
-              <p className="text-3xl font-bold text-white">{stats.years}</p>
-              <p className="text-[11px] text-zinc-500">Years Experience</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">{stats.projects}</p>
-              <p className="text-[11px] text-zinc-500">Projects</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">
-                {stats.technologies}
-              </p>
-              <p className="text-[11px] text-zinc-500">Technologies</p>
             </div>
           </div>
         </div>
@@ -171,12 +129,6 @@ export default function HomeBento({
           <h2 className="text-3xl md:text-5xl font-bold text-white dark:text-white">
             Selected Work
           </h2>
-          <Link
-            href="/projects"
-            className="text-sm font-medium text-zinc-400 hover:text-white transition-colors hidden md:block"
-          >
-            View All →
-          </Link>
         </div>
         <BentoGrid
           cards={cards}
@@ -188,14 +140,6 @@ export default function HomeBento({
           clickEffect={true}
           glowColor="132, 0, 255"
         />
-        <div className="mt-8 text-center md:hidden">
-          <Link
-            href="/projects"
-            className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-          >
-            View All Projects →
-          </Link>
-        </div>
       </div>
     </section>
   );

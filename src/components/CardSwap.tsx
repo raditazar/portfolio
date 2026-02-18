@@ -118,9 +118,10 @@ const CardSwap: React.FC<CardSwapProps> = ({
       tlRef.current = tl;
 
       tl.to(elFront, {
-        y: '+=500',
+        x: '+=700',
+        opacity: 0,
         duration: config.durDrop,
-        ease: config.ease
+        ease: 'power2.in'
       });
 
       tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
@@ -145,7 +146,13 @@ const CardSwap: React.FC<CardSwapProps> = ({
       tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
       tl.call(
         () => {
-          gsap.set(elFront, { zIndex: backSlot.zIndex });
+          gsap.set(elFront, {
+            zIndex: backSlot.zIndex,
+            x: backSlot.x + 700,
+            y: backSlot.y,
+            z: backSlot.z,
+            opacity: 0
+          });
         },
         undefined,
         'return'
@@ -154,12 +161,11 @@ const CardSwap: React.FC<CardSwapProps> = ({
         elFront,
         {
           x: backSlot.x,
-          y: backSlot.y,
-          z: backSlot.z,
+          opacity: 1,
           duration: config.durReturn,
           ease: config.ease
         },
-        'return'
+        'return+=0.05'
       );
 
       tl.call(() => {
