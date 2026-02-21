@@ -95,6 +95,9 @@
 }
 
 .card-nav-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: #111;
   color: white;
   border: none;
@@ -102,9 +105,11 @@
   padding: 0 1rem;
   height: 100%;
   font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1;
   cursor: pointer;
+  text-decoration: none;
   transition: background-color 0.3s ease;
-  align-items: center;
 }
 
 .card-nav-cta-button:hover {

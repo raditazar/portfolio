@@ -3,6 +3,8 @@ import Hero from "@/components/Hero";
 import HomeBento from "@/components/HomeBento";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
+import IntroOverlay from "@/components/IntroOverlay";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const dynamic = "force-dynamic";
 import HomeLogoLoop from "@/components/HomeLogoLoop";
@@ -93,6 +95,9 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[#0B0F14] text-white selection:bg-white selection:text-black overflow-x-clip relative">
+      {/* Intro Animation */}
+      <IntroOverlay />
+
       {/* Background LightRays */}
       <HomeLightRays />
 
@@ -107,6 +112,8 @@ export default async function Home() {
         <About stats={{ projects: data.totalProjectCount, technologies: 12 }} />
         <Footer />
       </div>
+
+      <ScrollToTop />
     </main>
   );
 }

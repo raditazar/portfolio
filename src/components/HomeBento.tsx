@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BentoGrid, { BentoCardData } from "./BentoGrid";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Project {
   id: string;
@@ -79,7 +84,7 @@ export default function HomeBento({
       color: "#07000f",
       href: "/projects",
       content: (
-        <div className="flex flex-col h-full p-1 justify-between group">
+        <div className="flex flex-col h-full justify-between group">
           {/* Top badge */}
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/8 border border-white/10 text-zinc-400">
@@ -94,7 +99,7 @@ export default function HomeBento({
 
           {/* Main content */}
           <div className="mt-auto">
-            <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">
+            <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">
               See everything I&apos;ve built
             </p>
             <div className="flex items-end justify-between">
@@ -122,25 +127,90 @@ export default function HomeBento({
     },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
+    const ctx = gsap.context(() => {
+      // Header animation
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current.children,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Grid animation
+      if (gridRef.current) {
+        gsap.fromTo(
+          gridRef.current,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="work" className="relative py-20">
+    <section ref={sectionRef} id="work" className="relative py-12 pb-8">
       <div className="max-w-5xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-white dark:text-white">
+        {/* Upgraded header */}
+        <div ref={headerRef} className="mb-14">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-px bg-purple-500" />
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-purple-400">
+              Portfolio
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
             Selected Work
           </h2>
+          <p className="text-base md:text-lg text-zinc-500 max-w-md">
+            A curated selection of recent projects and experiments.
+          </p>
         </div>
-        <BentoGrid
-          cards={cards}
-          enableSpotlight={true}
-          enableBorderGlow={true}
-          enableStars={true}
-          enableTilt={false}
-          enableMagnetism={true}
-          clickEffect={true}
-          glowColor="132, 0, 255"
-        />
+        <div ref={gridRef}>
+          <BentoGrid
+            cards={cards}
+            enableSpotlight={true}
+            enableBorderGlow={true}
+            enableStars={true}
+            enableTilt={false}
+            enableMagnetism={true}
+            clickEffect={true}
+            glowColor="132, 0, 255"
+          />
+        </div>
       </div>
+
     </section>
   );
 }

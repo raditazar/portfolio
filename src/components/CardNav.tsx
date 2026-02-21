@@ -28,6 +28,9 @@ export interface CardNavProps {
   buttonBgColor?: string;
   buttonTextColor?: string;
   rightSlot?: React.ReactNode;
+  logoHref?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
 }
 
 const CardNav: React.FC<CardNavProps> = ({
@@ -40,7 +43,10 @@ const CardNav: React.FC<CardNavProps> = ({
   menuColor,
   buttonBgColor,
   buttonTextColor,
-  rightSlot
+  rightSlot,
+  logoHref = '/',
+  buttonLabel = 'Get Started',
+  buttonHref = '#',
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -187,18 +193,20 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
-            <img src={logo} alt={logoAlt} className="logo" />
+            <a href={logoHref}>
+              <img src={logo} alt={logoAlt} className="logo" />
+            </a>
           </div>
 
           <div className="card-nav-right">
             {rightSlot && <div className="card-nav-right-slot">{rightSlot}</div>}
-            <button
-              type="button"
+            <a
+              href={buttonHref}
               className="card-nav-cta-button"
               style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
             >
-              Get Started
-            </button>
+              {buttonLabel}
+            </a>
           </div>
         </div>
 

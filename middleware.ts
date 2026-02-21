@@ -3,15 +3,15 @@ import { NextResponse } from "next/server";
 
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
-  const isLoginPage = pathname === "/admin/login";
+  const isLoginPage = pathname === "/admin";
   const isAuthenticated = !!req.auth;
 
   if (!isLoginPage && !isAuthenticated) {
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+    return NextResponse.redirect(new URL("/admin", req.url));
   }
 
   if (isLoginPage && isAuthenticated) {
-    return NextResponse.redirect(new URL("/admin", req.url));
+    return NextResponse.redirect(new URL("/admin/dashboard", req.url));
   }
 });
 

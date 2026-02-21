@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import { useState } from "react";
 
 const sidebarLinks = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
+  { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/admin/projects", label: "Projects", icon: "🗂️" },
   { href: "/admin/career", label: "Career", icon: "💼" },
   { href: "/admin/about", label: "About Info", icon: "👤" },
@@ -23,13 +23,13 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Don't show layout for login page
-  if (pathname === "/admin/login") {
+  if (pathname === "/admin") {
     return <>{children}</>;
   }
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });
-    router.push("/admin/login");
+    router.push("/admin");
   };
 
   return (
@@ -58,8 +58,8 @@ export default function AdminLayout({
         <nav className="flex-1 p-4 space-y-1">
           {sidebarLinks.map((link) => {
             const isActive =
-              link.href === "/admin"
-                ? pathname === "/admin"
+              link.href === "/admin/dashboard"
+                ? pathname === "/admin/dashboard"
                 : pathname.startsWith(link.href);
             return (
               <Link
@@ -113,8 +113,8 @@ export default function AdminLayout({
           <div className="text-sm text-zinc-500">
             {sidebarLinks.find(
               (l) =>
-                l.href === "/admin"
-                  ? pathname === "/admin"
+                l.href === "/admin/dashboard"
+                  ? pathname === "/admin/dashboard"
                   : pathname.startsWith(l.href)
             )?.label ?? "Admin"}
           </div>

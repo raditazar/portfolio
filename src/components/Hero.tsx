@@ -20,11 +20,11 @@ export default function Hero() {
 
       {/* Background Overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-transparent to-transparent pointer-events-none z-0" />
-      <div className="absolute top-1/3 right-1/3 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="absolute top-[16%] right-1/3 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="absolute top-[40%] left-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none z-0" />
       
       {/* Bottom fade for seamless transition */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0B0F14] pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-0 w-full h-80 bg-gradient-to-b from-transparent via-[#0B0F14]/70 to-[#0B0F14] pointer-events-none z-[1]" />
       
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         <div className="max-w-3xl">
@@ -122,17 +122,64 @@ export default function Hero() {
             skewAmount={5}
             easing="elastic"
           >
-            <Card customClass="profile-card" >
-              <Image
-                src="/images/IMG_8407.JPG"
-                alt="Profile Card"
-                width={650}
-                height={500}
-                className="rounded-2xl shadow-xl"
-              />
+            <Card customClass="profile-card">
+              <div className="terminal-titlebar">
+                <div className="terminal-dots">
+                  <span className="dot-red" />
+                  <span className="dot-yellow" />
+                  <span className="dot-green" />
+                </div>
+                <span className="terminal-title">raditazar — portfolio</span>
+                <div className="terminal-spacer" />
+              </div>
+              <div className="terminal-content">
+                <Image
+                  src="/images/profile2.jpeg"
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             </Card>
-            <Card customClass="profile-card" />
-            <Card customClass="profile-card" />
+            <Card customClass="profile-card">
+              <div className="terminal-titlebar">
+                <div className="terminal-dots">
+                  <span className="dot-red" />
+                  <span className="dot-yellow" />
+                  <span className="dot-green" />
+                </div>
+                <span className="terminal-title">raditazar — portfolio</span>
+                <div className="terminal-spacer" />
+              </div>
+              <div className="terminal-content">
+                <Image
+                  src="/images/profile3.JPG"
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </Card>
+            <Card customClass="profile-card">
+              <div className="terminal-titlebar">
+                <div className="terminal-dots">
+                  <span className="dot-red" />
+                  <span className="dot-yellow" />
+                  <span className="dot-green" />
+                </div>
+                <span className="terminal-title">raditazar — portfolio</span>
+                <div className="terminal-spacer" />
+              </div>
+              <div className="terminal-content">
+                <Image
+                  src="/images/profile4.jpeg"
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </Card>
+            
           </CardSwap>
         </div>
       </div>

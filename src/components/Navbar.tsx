@@ -1,7 +1,6 @@
 "use client"
 
 import CardNav from './CardNav'
-import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
 export default function Navbar() {
     const items = [
@@ -45,11 +44,9 @@ export default function Navbar() {
             buttonBgColor='#111'
             buttonTextColor='#fff'
             ease='power3.out'
-            rightSlot={
-                <AnimatedThemeToggler
-                    className="p-2 rounded-lg hover:bg-black/10 transition-colors"
-                />
-            }
+            logoHref='/'
+            buttonLabel='Contact Me'
+            buttonHref='#contact'
         />
     )
 }

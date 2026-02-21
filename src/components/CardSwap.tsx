@@ -80,12 +80,12 @@ const CardSwap: React.FC<CardSwapProps> = ({
   const config =
     easing === 'elastic'
       ? {
-          ease: 'elastic.out(0.6,0.9)',
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
-          promoteOverlap: 0.9,
-          returnDelay: 0.05
+          ease: 'power3.out',
+          durDrop: 0.7,
+          durMove: 0.9,
+          durReturn: 0.8,
+          promoteOverlap: 0.4,
+          returnDelay: 0.15
         }
       : {
           ease: 'power1.inOut',
@@ -118,10 +118,11 @@ const CardSwap: React.FC<CardSwapProps> = ({
       tlRef.current = tl;
 
       tl.to(elFront, {
-        x: '+=700',
+        y: '-=80',
+        scale: 0.9,
         opacity: 0,
         duration: config.durDrop,
-        ease: 'power2.in'
+        ease: 'power3.in'
       });
 
       tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
@@ -138,7 +139,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
             duration: config.durMove,
             ease: config.ease
           },
-          `promote+=${i * 0.15}`
+          `promote+=${i * 0.1}`
         );
       });
 
@@ -148,9 +149,10 @@ const CardSwap: React.FC<CardSwapProps> = ({
         () => {
           gsap.set(elFront, {
             zIndex: backSlot.zIndex,
-            x: backSlot.x + 700,
-            y: backSlot.y,
+            x: backSlot.x,
+            y: backSlot.y + 40,
             z: backSlot.z,
+            scale: 1,
             opacity: 0
           });
         },
@@ -160,7 +162,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
       tl.to(
         elFront,
         {
-          x: backSlot.x,
+          y: backSlot.y,
           opacity: 1,
           duration: config.durReturn,
           ease: config.ease
