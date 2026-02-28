@@ -1,5 +1,7 @@
-import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
@@ -7,11 +9,11 @@ export default auth((req) => {
   const isAuthenticated = !!req.auth;
 
   if (!isLoginPage && !isAuthenticated) {
-    return NextResponse.redirect(new URL("/admin", req.url));
+    return Response.redirect(new URL("/admin", req.url));
   }
 
   if (isLoginPage && isAuthenticated) {
-    return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    return Response.redirect(new URL("/admin/dashboard", req.url));
   }
 });
 

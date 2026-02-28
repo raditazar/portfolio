@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { writeFile } from "fs/promises";
+import { supabase } from "@/lib/supabase";
 import path from "path";
 
 export async function POST(req: NextRequest) {
@@ -23,12 +23,29 @@ export async function POST(req: NextRequest) {
     // Generate unique filename
     const ext = path.extname(file.name);
     const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}${ext}`;
-    const filepath = path.join(process.cwd(), "public", "images", filename);
+    const filePath = `uploads/${filename}`;
 
-    await writeFile(filepath, buffer);
+    const { error } = await supabase.storage
+      .from("images")
+      .upload(filePath, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error("Supabase upload error:", error);
+      return NextResponse.json(
+        { error: "Failed to upload file" },
+        { status: 500 }
+      );
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("images")
+      .getPublicUrl(filePath);
 
     return NextResponse.json({
-      url: `/images/${filename}`,
+      url: publicUrlData.publicUrl,
       filename,
     });
   } catch {

@@ -26,9 +26,7 @@ export default function AdminSettingsPage() {
     try {
       const res = await fetch("/api/settings");
       if (res.ok) {
-        const items: SettingEntry[] = await res.json();
-        const map: Record<string, string> = {};
-        items.forEach((i) => (map[i.key] = i.value));
+        const map: Record<string, string> = await res.json();
         setData(map);
       }
     } catch {
