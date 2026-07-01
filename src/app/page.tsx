@@ -1,9 +1,9 @@
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import HomeBento from "@/components/HomeBento";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
-import IntroOverlay from "@/components/IntroOverlay";
+import { ArcRevealHero } from "@/components/ui/arc-preloader-hero";
 import ScrollToTop from "@/components/ScrollToTop";
 
 export const dynamic = "force-dynamic";
@@ -95,25 +95,24 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[#0B0F14] text-white selection:bg-white selection:text-black overflow-x-clip relative">
-      {/* Intro Animation */}
-      <IntroOverlay />
+      <ArcRevealHero greetingHold={300}>
+        {/* Background LightRays */}
+        <HomeLightRays />
 
-      {/* Background LightRays */}
-      <HomeLightRays />
+        <div className="relative z-10">
+          <Navbar />
+          <Hero />
+          <HomeLogoLoop />
+          <HomeBento
+            projects={data.projects}
+            totalProjectCount={data.totalProjectCount}
+          />
+          <About stats={{ projects: data.totalProjectCount, technologies: 12 }} />
+          <Footer />
+        </div>
 
-      <div className="relative z-10">
-        <Navbar />
-        <Hero />
-        <HomeLogoLoop />
-        <HomeBento
-          projects={data.projects}
-          totalProjectCount={data.totalProjectCount}
-        />
-        <About stats={{ projects: data.totalProjectCount, technologies: 12 }} />
-        <Footer />
-      </div>
-
-      <ScrollToTop />
+        <ScrollToTop />
+      </ArcRevealHero>
     </main>
   );
 }

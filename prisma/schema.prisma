@@ -37,7 +37,7 @@ model Project {
 
 model CareerEntry {
   id           String   @id @default(cuid())
-  type         String   // "work" or "education"
+  type         String
   title        String
   organization String
   description  String?

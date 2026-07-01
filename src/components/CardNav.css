@@ -1,38 +1,44 @@
 .card-nav-container {
   position: fixed;
-  top: 0;
+  top: 0.85rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 800px;
+  width: calc(100% - 2rem);
+  max-width: none;
   z-index: 99;
   box-sizing: border-box;
-  padding-top: 1.5em;
-  transition: padding-top 0.3s ease;
+  padding-top: 0;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1), max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1), top 0.35s ease;
 }
 
 .card-nav-container.scrolled {
-  padding-top: 0.75em;
+  padding-top: 0;
+  width: min(92%, 960px);
+  max-width: 960px;
 }
 
 .card-nav {
   display: block;
-  height: 60px;
+  height: 56px;
   padding: 0;
-  background-color: white;
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  box-shadow: 0 24px 70px rgba(5, 0, 16, 0.32);
   position: relative;
   overflow: hidden;
   will-change: height;
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: background-color 0.45s ease, backdrop-filter 0.45s ease, box-shadow 0.45s ease, border-radius 0.55s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.45s ease;
 }
 
 .card-nav-container.scrolled .card-nav {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  box-shadow: 0 18px 50px rgba(5, 0, 16, 0.38);
+}
+
+.card-nav.open {
+  border-radius: 1.25rem;
 }
 
 .card-nav-top {
@@ -40,11 +46,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.45rem 0.55rem 1.1rem;
+  padding: 0.45rem 0.45rem 0.45rem 1rem;
   z-index: 2;
 }
 
@@ -63,7 +69,7 @@
 }
 
 .hamburger-line {
-  width: 30px;
+  width: 24px;
   height: 2px;
   background-color: currentColor;
   transition:
@@ -91,7 +97,8 @@
 }
 
 .logo {
-  height: 28px;
+  height: 24px;
+  filter: brightness(0) invert(1);
 }
 
 .card-nav-cta-button {
@@ -101,11 +108,13 @@
   background-color: #111;
   color: white;
   border: none;
-  border-radius: calc(0.75rem - 0.35rem);
+  border-radius: 999px;
   padding: 0 1rem;
   height: 100%;
-  font-weight: 500;
-  font-size: 0.875rem;
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1;
   cursor: pointer;
   text-decoration: none;
@@ -113,7 +122,7 @@
 }
 
 .card-nav-cta-button:hover {
-  background-color: #333;
+  background-color: #fff;
 }
 
 .card-nav-right {
@@ -133,7 +142,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 60px;
+  top: 56px;
   bottom: 0;
   padding: 0.5rem;
   display: flex;
@@ -153,7 +162,7 @@
   height: 100%;
   flex: 1 1 0;
   min-width: 0;
-  border-radius: calc(0.75rem - 0.2rem);
+  border-radius: 0.95rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -191,8 +200,13 @@
 
 @media (max-width: 768px) {
   .card-nav-container {
-    width: 90%;
-    top: 1.2em;
+    width: 92%;
+    max-width: 960px;
+    top: 0.8rem;
+  }
+
+  .card-nav-container.scrolled {
+    width: 92%;
   }
 
   .card-nav-top {
