@@ -25,7 +25,6 @@ export interface ArcRevealHeroProps {
   introClassName?: string;
   greetingClassName?: string;
   revealClassName?: string;
-  storageKey?: string;
   children?: React.ReactNode;
 }
 
@@ -52,7 +51,6 @@ export function ArcRevealHero({
   introClassName,
   greetingClassName,
   revealClassName,
-  storageKey,
   children,
 }: ArcRevealHeroProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -75,18 +73,8 @@ export function ArcRevealHero({
   React.useEffect(() => {
     if (prefersReducedMotion) {
       setPhase("done");
-      return;
     }
-    if (storageKey && typeof window !== "undefined") {
-      try {
-        if (window.sessionStorage.getItem(storageKey) === "done") {
-          setPhase("done");
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-  }, [prefersReducedMotion, storageKey]);
+  }, [prefersReducedMotion]);
 
   React.useEffect(() => {
     if (phase !== "intro") return;
@@ -105,19 +93,12 @@ export function ArcRevealHero({
       duration: revealDuration / 1000,
       ease: [0.76, 0, 0.24, 1],
       onComplete: () => {
-        if (storageKey && typeof window !== "undefined") {
-          try {
-            window.sessionStorage.setItem(storageKey, "done");
-          } catch {
-            /* ignore */
-          }
-        }
         setIntroPlayed();
         setPhase("done");
       },
     });
     return () => controls.stop();
-  }, [phase, progress, revealDuration, storageKey]);
+  }, [phase, progress, revealDuration]);
 
   const showOverlay = phase !== "done";
   const current = greetings[Math.min(index, greetings.length - 1)];

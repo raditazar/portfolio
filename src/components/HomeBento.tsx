@@ -26,11 +26,13 @@ interface Project {
 interface HomeBentoProps {
   projects: Project[];
   totalProjectCount?: number;
+  compact?: boolean;
 }
 
 export default function HomeBento({
   projects,
   totalProjectCount,
+  compact = false,
 }: HomeBentoProps) {
   const cards: BentoCardData[] = [
     // Project cards (up to 3)
@@ -182,24 +184,28 @@ export default function HomeBento({
   }, []);
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-12 pb-8">
-      <div className="max-w-5xl mx-auto px-6">
+    <section
+      ref={sectionRef}
+      id="work"
+      className={`relative ${compact ? "home-bento-compact h-full py-5" : "py-12 pb-8"}`}
+    >
+      <div className={`mx-auto px-6 ${compact ? "flex h-full max-w-6xl flex-col" : "max-w-5xl"}`}>
         {/* Upgraded header */}
-        <div ref={headerRef} className="mb-14">
+        <div ref={headerRef} className={compact ? "mb-5 shrink-0" : "mb-14"}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-px bg-purple-500" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-purple-400">
               Portfolio
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
+          <h2 className={`${compact ? "text-3xl md:text-4xl" : "text-3xl md:text-5xl"} font-bold text-white mb-3`}>
             Selected Work
           </h2>
-          <p className="text-base md:text-lg text-zinc-500 max-w-md">
+          <p className={`${compact ? "text-sm md:text-base" : "text-base md:text-lg"} text-zinc-500 max-w-md`}>
             A curated selection of recent projects and experiments.
           </p>
         </div>
-        <div ref={gridRef}>
+        <div ref={gridRef} className={compact ? "min-h-0 flex-1" : undefined}>
           <BentoGrid
             cards={cards}
             enableSpotlight={true}

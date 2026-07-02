@@ -230,3 +230,21 @@
   position: relative;
   user-select: none;
 }
+
+.home-bento-compact .card-grid {
+  width: 100%;
+  max-width: 64rem;
+  height: 100%;
+  margin: 0 auto;
+  font-size: clamp(0.82rem, 0.72rem + 0.35vw, 1.05rem);
+}
+
+.home-bento-compact .magic-bento-card {
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .home-bento-compact .card-grid {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(80px, 0.45fr);
+  }
+}

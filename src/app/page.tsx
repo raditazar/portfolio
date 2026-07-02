@@ -1,13 +1,10 @@
 ﻿import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import HomeBento from "@/components/HomeBento";
-import About from "@/components/About";
+import ScrollExperience from "@/components/ScrollExperience";
 import Footer from "@/components/Footer";
-import { ArcRevealHero } from "@/components/ui/arc-preloader-hero";
 import ScrollToTop from "@/components/ScrollToTop";
+import { ArcRevealHero } from "@/components/ui/arc-preloader-hero";
 
 export const dynamic = "force-dynamic";
-import HomeLogoLoop from "@/components/HomeLogoLoop";
 import HomeLightRays from "@/components/HomeLightRays";
 import prisma from "@/lib/prisma";
 
@@ -101,13 +98,11 @@ export default async function Home() {
 
         <div className="relative z-10">
           <Navbar />
-          <Hero />
-          <HomeLogoLoop />
-          <HomeBento
+          <ScrollExperience
             projects={data.projects}
             totalProjectCount={data.totalProjectCount}
+            stats={{ projects: data.totalProjectCount, technologies: 12 }}
           />
-          <About stats={{ projects: data.totalProjectCount, technologies: 12 }} />
           <Footer />
         </div>
 
