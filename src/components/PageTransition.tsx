@@ -98,14 +98,14 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
   // Once pathname changes client-side, trigger exit transition
   useEffect(() => {
-    if (phase === "entrance") {
+    if (phase === "entrance" && pendingRoute === pathname) {
       const timer = window.setTimeout(() => {
         setPhase("exit");
         setPendingRoute(null);
       }, 0);
       return () => window.clearTimeout(timer);
     }
-  }, [pathname, phase]);
+  }, [pathname, pendingRoute, phase]);
 
   // Reset to idle after exit animation completes
   useEffect(() => {
