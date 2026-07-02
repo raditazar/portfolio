@@ -250,3 +250,11 @@ html {
   background-color: rgb(39 39 42);
   color: white;
 }
+/* Hide scrollbar globally */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}

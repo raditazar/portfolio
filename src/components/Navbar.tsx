@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,7 +22,9 @@ const socialLinks = [
 
 // SVG Liquid panel variants (100x100 relative viewbox)
 // Starts from right (x=100), bulges out left, then straightens at x=0
-const curveVariants = {
+const curveEase: [number, number, number, number] = [0.76, 0, 0.24, 1];
+
+const curveVariants: Variants = {
   initial: {
     d: "M 100,0 C 100,0 100,50 100,100 L 100,100 L 100,0 Z",
   },
@@ -35,7 +37,7 @@ const curveVariants = {
     transition: {
       times: [0, 0.45, 1],
       duration: 0.95,
-      ease: [0.76, 0, 0.24, 1]
+      ease: curveEase
     }
   },
   exit: {
@@ -47,7 +49,7 @@ const curveVariants = {
     transition: {
       times: [0, 0.45, 1],
       duration: 0.85,
-      ease: [0.76, 0, 0.24, 1]
+      ease: curveEase
     }
   }
 };

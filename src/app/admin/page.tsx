@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -60,7 +61,7 @@ export default function AdminLoginPage() {
 
         {/* Top — Logo */}
         <div className="relative z-10">
-          <a href="/" className="inline-flex items-center gap-3 group">
+          <Link href="/" className="inline-flex items-center gap-3 group">
             <Image
               src="/assets/dark_logo.png"
               alt="Logo"
@@ -71,7 +72,7 @@ export default function AdminLoginPage() {
             <span className="text-sm font-semibold text-zinc-400 group-hover:text-white transition-colors">
               raditazar.com
             </span>
-          </a>
+          </Link>
         </div>
 
         {/* Center — Brand message */}
@@ -229,7 +230,7 @@ export default function AdminLoginPage() {
 
           {/* Back link */}
           <div className="mt-8 pt-6 border-t border-zinc-800/50">
-            <a
+            <Link
               href="/"
               className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
             >
@@ -238,7 +239,7 @@ export default function AdminLoginPage() {
                 <polyline points="12 19 5 12 12 5" />
               </svg>
               Back to portfolio
-            </a>
+            </Link>
           </div>
         </div>
       </div>

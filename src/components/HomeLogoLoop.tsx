@@ -66,7 +66,7 @@ export default function HomeLogoLoop() {
   return (
     <section ref={sectionRef} className="relative pt-8 pb-8 lg:pt-12">
       {/* Top fade for seamless transition from Hero */}
-      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0B0F14] to-transparent pointer-events-none z-[1]" />
+      <div className="absolute top-0 left-0 w-full h-24 bg-linear-to-b from-[#0B0F14] to-transparent pointer-events-none z-1" />
 
       {/* Section label */}
       <div className="max-w-5xl mx-auto px-6 mb-10">

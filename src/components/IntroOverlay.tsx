@@ -12,8 +12,8 @@ export default function IntroOverlay() {
   useEffect(() => {
     // Only play intro once per browser session
     if (sessionStorage.getItem("intro-played")) {
-      setHidden(true);
-      return;
+      const timer = window.setTimeout(() => setHidden(true), 0);
+      return () => window.clearTimeout(timer);
     }
 
     // Lock scroll during intro

@@ -7,25 +7,30 @@ import { cn } from "@/lib/utils";
 
 const activities = [
   {
-    src: "/images/profile.JPG",
+    src: "/images/setup.webp",
     alt: "Coding setup in Yogyakarta",
-    code: "Yogya - Setup",
+    code: "Setup - Yogyakarta",
   },
   {
-    src: "/images/profile2.jpeg",
-    alt: "AI & ML Bootcamp Session",
-    code: "AI - Bootcamp",
+    src: "/images/workshop.webp",
+    alt: "Web3 Workshop & Bootcamp",
+    code: "Web3 - Workshop",
   },
   {
-    src: "/images/profile3.JPG",
+    src: "/images/team.webp",
     alt: "Team Discussion & Workflow",
     code: "Team - Sync",
   },
   {
-    src: "/images/profile4.jpeg",
-    alt: "Late Night Building UI",
-    code: "Build - UI",
+    src: "/images/coinfest.webp",
+    alt: "Coinfest 2025 - Event",
+    code: "Coinfest - 2025",
   },
+  {
+    src: "/images/public-speaking.webp",
+    alt: "Public Speaking & Presentation",
+    code: "Public Speaking",
+  }
 ];
 
 export function ActivityGallery({ className }: { className?: string }) {
@@ -40,7 +45,7 @@ export function ActivityGallery({ className }: { className?: string }) {
           return (
             <motion.div
               key={index}
-              className="relative cursor-pointer overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/50"
+              className="relative cursor-pointer overflow-hidden rounded-3xl  bg-zinc-900/50"
               initial={{ width: "5rem", height: "32rem" }}
               animate={{
                 width: isActive ? "32rem" : "5rem",
@@ -57,7 +62,7 @@ export function ActivityGallery({ className }: { className?: string }) {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                    className="absolute inset-0 z-10 bg-linear-to-t from-black/80 via-black/20 to-transparent"
                   />
                 )}
               </AnimatePresence>
@@ -88,7 +93,7 @@ export function ActivityGallery({ className }: { className?: string }) {
                 sizes="(max-width: 768px) 100vw, 30vw"
                 className={cn(
                   "object-cover transition-transform duration-500",
-                  isActive ? "scale-105" : "scale-100 grayscale-[30%]"
+                  isActive ? "scale-105" : "scale-100 grayscale-30"
                 )}
               />
             </motion.div>

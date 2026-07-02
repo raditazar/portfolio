@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -34,7 +34,9 @@ export function usePageTransition() {
 }
 
 // SVG Arc Transition curves
-const entranceVariants = {
+const curveEase: [number, number, number, number] = [0.76, 0, 0.24, 1];
+
+const entranceVariants: Variants = {
   initial: {
     d: "M 0 100 Q 50 100 100 100 L 100 100 L 0 100 Z",
   },
@@ -47,12 +49,12 @@ const entranceVariants = {
     transition: {
       times: [0, 0.45, 1],
       duration: 0.6,
-      ease: [0.76, 0, 0.24, 1]
+      ease: curveEase
     }
   }
 };
 
-const exitVariants = {
+const exitVariants: Variants = {
   initial: {
     d: "M 0 0 L 100 0 L 100 100 Q 50 100 0 100 Z",
   },
@@ -65,7 +67,7 @@ const exitVariants = {
     transition: {
       times: [0, 0.45, 1],
       duration: 0.6,
-      ease: [0.76, 0, 0.24, 1]
+      ease: curveEase
     }
   }
 };
@@ -97,10 +99,13 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
   // Once pathname changes client-side, trigger exit transition
   useEffect(() => {
     if (phase === "entrance") {
-      setPhase("exit");
-      setPendingRoute(null);
+      const timer = window.setTimeout(() => {
+        setPhase("exit");
+        setPendingRoute(null);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
-  }, [pathname]);
+  }, [pathname, phase]);
 
   // Reset to idle after exit animation completes
   useEffect(() => {

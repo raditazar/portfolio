@@ -18,6 +18,42 @@ export const metadata: Metadata = {
   },
 };
 
+const extensionAttributeCleanup = `
+(() => {
+  const patterns = [/^bis_/, /^__processed_/];
+  const clean = (node) => {
+    if (node.nodeType !== 1) return;
+    for (const attr of Array.from(node.attributes)) {
+      if (patterns.some((pattern) => pattern.test(attr.name))) {
+        node.removeAttribute(attr.name);
+      }
+    }
+  };
+  const cleanTree = (root) => {
+    clean(root);
+    for (const el of root.querySelectorAll?.("*") || []) clean(el);
+  };
+  cleanTree(document.documentElement);
+  const observer = new MutationObserver((records) => {
+    for (const record of records) {
+      if (record.type === "attributes") clean(record.target);
+      for (const node of record.addedNodes) {
+        if (node.nodeType === 1) cleanTree(node);
+      }
+    }
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  });
+  window.addEventListener("load", () => {
+    cleanTree(document.documentElement);
+    window.setTimeout(() => observer.disconnect(), 1000);
+  }, { once: true });
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +61,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={plus_jakarta_sans.className}>
+      <body
+        className={plus_jakarta_sans.className}
+        suppressHydrationWarning
+      >
+        <script dangerouslySetInnerHTML={{ __html: extensionAttributeCleanup }} />
         <TransitionProvider>
           {children}
         </TransitionProvider>
