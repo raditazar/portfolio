@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { usePageTransition } from "./PageTransition";
 
@@ -111,28 +110,26 @@ export default function Navbar() {
           <Link 
             href="/" 
             onClick={(e) => handleLinkClick(e, "/", "home")}
-            className="group relative block h-8 w-32 overflow-hidden"
+            aria-label="Raditazar home"
+            className="group relative flex h-10 w-36 items-center overflow-hidden"
           >
-            {/* Logo Image - slides left and fades out */}
-            <div className="absolute inset-0 flex items-center transition-all duration-300 ease-out transform group-hover:translate-x-[-100%] group-hover:opacity-0">
-              <Image
-                src="/assets/logo_only.png"
-                alt="Logo"
-                width={32}
-                height={32}
-                className="object-contain filter invert"
+            <span
+              aria-hidden
+              className="absolute left-0 top-1/2 block h-8 w-8 -translate-y-1/2 bg-white transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] [mask-image:url('/assets/logo_only.png')] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] group-hover:-translate-x-2 group-hover:-translate-y-1/2 group-hover:scale-50 group-hover:rotate-[-10deg] group-hover:opacity-0"
+            />
+            <span className="absolute inset-0 flex items-center">
+              <span
+                aria-hidden
+                className="mr-2 h-1.5 w-1.5 scale-0 rounded-full bg-[#e7ff5f] opacity-0 shadow-[0_0_18px_rgba(231,255,95,0.55)] transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-100 group-hover:opacity-100"
               />
-            </div>
-            {/* Logo Text "raditazar" - slides in from the right and fades in */}
-            <div className="absolute inset-0 flex items-center transition-all duration-300 ease-out transform translate-x-[100%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100">
-              <span className="font-serif text-lg font-bold tracking-tight text-white lowercase">
+              <span className="inline-block max-w-0 overflow-hidden whitespace-nowrap font-serif text-lg font-bold tracking-tight text-white opacity-0 blur-sm transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:max-w-28 group-hover:opacity-100 group-hover:blur-0">
                 raditazar
               </span>
-            </div>
+            </span>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="flex items-center gap-8">
+          <div className="hidden items-center gap-8 md:flex">
             {navItems.filter(item => item.label !== "Home").map((item) => (
               <Link
                 key={item.label}
@@ -151,15 +148,16 @@ export default function Navbar() {
 
       {/* Floating menu button */}
       <AnimatePresence>
-        {isScrolled && (
+        {(isScrolled || isOpen) && (
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
             onClick={() => setIsOpen(!isOpen)}
-            className="fixed right-6 top-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 shadow-lg transition-transform duration-300 hover:scale-105 sm:right-8 lg:right-16 cursor-pointer"
+            className="fixed right-6 top-6 z-50 hidden h-16 w-16 items-center justify-center rounded-full bg-zinc-50 shadow-lg transition-transform duration-300 hover:scale-105 sm:right-8 md:flex lg:right-16 cursor-pointer"
             aria-label="Toggle Menu"
+            aria-expanded={isOpen}
           >
             <div className="flex flex-col gap-1.5 justify-center items-center">
               <span className={`h-[2px] w-6 bg-zinc-950 transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[8px]" : ""}`} />
@@ -169,6 +167,22 @@ export default function Navbar() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      <motion.button
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed right-5 top-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-50 shadow-lg transition-transform duration-300 active:scale-95 md:hidden cursor-pointer"
+        aria-label="Toggle Menu"
+        aria-expanded={isOpen}
+      >
+        <div className="flex flex-col gap-1.5 justify-center items-center">
+          <span className={`h-[2px] w-5 bg-zinc-950 transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+          <span className={`h-[2px] w-5 bg-zinc-950 transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
+          <span className={`h-[2px] w-5 bg-zinc-950 transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
+        </div>
+      </motion.button>
 
       {/* Sidebar Navigation */}
       <AnimatePresence>
@@ -184,7 +198,7 @@ export default function Navbar() {
             />
 
             {/* Sidebar liquid container */}
-            <div className="fixed right-0 top-0 z-40 h-screen w-[88vw] sm:w-[50vw] md:w-[33vw] min-w-[320px] max-w-[480px]">
+            <div className="fixed right-0 top-0 z-40 h-screen w-[88vw] min-w-0 max-w-[480px] sm:w-[50vw] md:w-[33vw]">
               
               {/* Animated Liquid Background SVG */}
               <svg className="absolute left-[-99px] top-0 h-full w-[calc(100%+100px)] fill-[#f5f4f3] pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -209,7 +223,7 @@ export default function Navbar() {
                   x: 20, 
                   transition: { duration: 0.3, ease: [0.76, 0, 0.24, 1] } 
                 }}
-                className="relative z-20 flex h-full w-full flex-col p-12 text-[#120820] justify-between"
+                className="relative z-20 flex h-full w-full flex-col justify-between p-8 text-[#120820] sm:p-12"
               >
                 
                 {/* Header */}
@@ -223,7 +237,6 @@ export default function Navbar() {
                 {/* Links */}
                 <div className="flex flex-col gap-6 my-auto">
                   {navItems.map((item, index) => {
-                    const isActive = pathname === item.href;
                     return (
                       <motion.div
                         key={item.label}

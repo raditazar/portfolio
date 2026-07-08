@@ -108,10 +108,10 @@ export default function ScrollExperience({
   return (
     <section ref={rootRef} className="relative bg-[#0B0F14] text-white">
       {/* Pinned Animation Container */}
-      <div ref={stickyRef} className="sticky top-0 h-screen w-full overflow-hidden">
+      <div ref={stickyRef} className="sticky top-0 hidden h-screen w-full overflow-hidden md:block">
         {/* Layer 1: HomeBento underneath Hero, revealed after panels split */}
         <div ref={projectContainerRef} className="absolute inset-0 z-0 flex h-screen items-center justify-center overflow-hidden bg-[#0B0F14]">
-          <div className="h-full w-full max-w-6xl px-6">
+          <div className="h-full w-full max-w-[88rem] px-4 sm:px-5 lg:px-8">
             <HomeBento compact projects={projects} totalProjectCount={totalProjectCount} />
           </div>
         </div>
@@ -165,15 +165,23 @@ export default function ScrollExperience({
         </div>
       </div>
 
+      <div className="md:hidden">
+        <Hero />
+      </div>
+
       {/* Mobile Fallback - stack naturally */}
-      <div className="relative z-40 bg-[#f4efe7] px-6 py-20 md:hidden text-zinc-950">
-        <div className="mb-12">
-          <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-red-500">Get to know me</p>
-          <h2 className="font-serif text-5xl font-black leading-none text-red-500">About Me</h2>
-          <p className="mt-6 text-sm font-semibold leading-6 text-zinc-700">Based in Yogyakarta. I&apos;m Raditya Azhar Ananta, an Information Engineering student who treats code as a creative medium.</p>
+      <div id="about" className="relative z-40 bg-[#f4efe7] px-5 py-16 text-zinc-950 md:hidden sm:px-8">
+        <div className="mx-auto mb-10 max-w-xl">
+          <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-zinc-950">Get to know me</p>
+          <h2 className="font-serif text-5xl font-black leading-none text-zinc-950">About Me</h2>
+          <div className="my-6 h-px w-20 bg-zinc-950" />
+          <div className="space-y-4 text-sm font-semibold leading-6 text-zinc-700">
+            <p>Based in <span className="text-zinc-950">Yogyakarta</span>. I&apos;m <span className="text-zinc-950">Raditya Azhar Ananta</span>, an Information Engineering student who treats code as a creative medium.</p>
+            <p>Previously leading a team as a student organization head, I learned how to bridge technical execution with human empathy. My goal isn&apos;t just to build websites, but to build <span className="text-zinc-950">digital experiences</span> that feel natural and intuitive.</p>
+          </div>
         </div>
-        <ActivityGallery />
-        <div className="mt-16 bg-[#0B0F14] py-8 text-white">
+        <ActivityGallery className="mx-auto max-w-xl" />
+        <div className="-mx-5 mt-16 bg-[#0B0F14] py-12 text-white sm:-mx-8">
           <HomeBento projects={projects} totalProjectCount={totalProjectCount} />
         </div>
       </div>

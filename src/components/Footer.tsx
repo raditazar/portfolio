@@ -64,12 +64,12 @@ export default function Footer() {
     <footer
       ref={footerRef}
       id="contact"
-      className="relative text-white pt-32 pb-10"
+      className="relative pt-24 pb-10 text-white md:pt-32"
     >
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* CTA section */}
-        <div ref={ctaRef} className="mb-24">
+        <div ref={ctaRef} className="mb-16 md:mb-24">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
             <span className="text-sm font-medium text-zinc-500">
@@ -83,7 +83,7 @@ export default function Footer() {
 
           <Link
             href="mailto:radityaazhar@gmail.com"
-            className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tighter hover:text-gray-300 transition-colors underline decoration-2 underline-offset-8 decoration-gray-600 hover:decoration-purple-400"
+            className="block max-w-full break-all text-3xl font-bold leading-tight tracking-tight underline decoration-2 underline-offset-8 decoration-gray-600 transition-colors hover:text-gray-300 hover:decoration-purple-400 sm:text-4xl md:text-7xl lg:text-8xl"
           >
             radityaazhar@gmail.com
           </Link>
@@ -107,7 +107,7 @@ export default function Footer() {
                 Projects
               </Link>
               <Link
-                href="#about"
+                href="/about"
                 className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
               >
                 About

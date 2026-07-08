@@ -38,18 +38,20 @@ export function ActivityGallery({ className }: { className?: string }) {
 
   return (
     <div className={cn("w-full py-4", className)}>
-      <div className="flex w-full items-center justify-start gap-2 overflow-x-auto pb-4 sm:justify-center">
+      <div className="flex w-full snap-x snap-mandatory items-center justify-start gap-2 overflow-x-auto pb-4 [scrollbar-width:none] sm:justify-center [&::-webkit-scrollbar]:hidden">
         {activities.map((item, index) => {
           const isActive = activeImage === index;
 
           return (
             <motion.div
               key={index}
-              className="relative cursor-pointer overflow-hidden rounded-3xl  bg-zinc-900/50"
-              initial={{ width: "5rem", height: "32rem" }}
+              className="relative snap-center cursor-pointer overflow-hidden rounded-[1.5rem] bg-zinc-900/50 sm:rounded-3xl"
+              initial={false}
               animate={{
-                width: isActive ? "32rem" : "5rem",
-                height: "32rem",
+                width: isActive
+                  ? "clamp(14rem, 72vw, 32rem)"
+                  : "clamp(3.25rem, 14vw, 5rem)",
+                height: "clamp(18rem, 72vw, 32rem)",
               }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
               onClick={() => setActiveImage(index)}
@@ -90,7 +92,7 @@ export function ActivityGallery({ className }: { className?: string }) {
                 src={item.src}
                 alt={item.alt}
                 fill
-                sizes="(max-width: 768px) 100vw, 30vw"
+                sizes="(max-width: 768px) 72vw, 30vw"
                 className={cn(
                   "object-cover transition-transform duration-500",
                   isActive ? "scale-105" : "scale-100 grayscale-30"
@@ -103,4 +105,3 @@ export function ActivityGallery({ className }: { className?: string }) {
     </div>
   );
 }
-

@@ -187,11 +187,11 @@ export default function HomeBento({
     <section
       ref={sectionRef}
       id="work"
-      className={`relative ${compact ? "home-bento-compact h-full py-5" : "py-12 pb-8"}`}
+      className={`relative ${compact ? "home-bento-compact h-full py-4" : "py-10 pb-8 md:py-12"}`}
     >
-      <div className={`mx-auto px-6 ${compact ? "flex h-full max-w-6xl flex-col" : "max-w-5xl"}`}>
+      <div className={`mx-auto px-4 sm:px-5 lg:px-6 ${compact ? "flex h-full max-w-[88rem] flex-col" : "max-w-6xl"}`}>
         {/* Upgraded header */}
-        <div ref={headerRef} className={compact ? "mb-5 shrink-0" : "mb-14"}>
+        <div ref={headerRef} className={compact ? "mb-4 shrink-0" : "mb-10 md:mb-14"}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-px bg-purple-500" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-purple-400">

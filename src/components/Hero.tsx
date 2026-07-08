@@ -9,11 +9,14 @@ const socialLinks = [
   { label: "Email", href: "mailto:raditazar@example.com" },
 ];
 
+const heroImageSrc = "/images/hero.png?v=20260708-181859";
+
 export default function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-[#120820] text-white">
       <Image
-        src="/images/hero.png"
+        key={heroImageSrc}
+        src={heroImageSrc}
         alt="Raditya Azhar Ananta portrait"
         fill
         priority
@@ -25,10 +28,10 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-[#120820]/90 via-[#120820]/28 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#120820]/95 via-[#120820]/30 to-transparent" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-8xl flex-col px-6 pb-8 pt-28 sm:px-8 sm:pb-12 lg:px-16">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-8xl flex-col px-5 pb-8 pt-24 sm:px-8 sm:pb-12 lg:px-16">
 
         {/* Social links - hide on mobile */}
-        <div className="absolute left-6 top-1/3 hidden gap-3 text-xl font-extrabold uppercase tracking-[0.2em] text-white/78 sm:left-8 sm:flex lg:left-16 lg:gap-12 lg:text-3xl">
+        <div className="absolute left-6 top-1/3 hidden gap-3 text-xl font-extrabold uppercase tracking-[0.2em] text-white/78 md:left-8 md:flex lg:left-16 lg:gap-12 lg:text-3xl">
           {socialLinks.map((link) => (
             <Link
               key={link.label}
@@ -77,6 +80,20 @@ export default function Hero() {
             <h1 className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black leading-[0.78] -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-right">
                 Building
             </h1>
+            <div className="mt-6 flex flex-wrap gap-3 md:hidden">
+              <Link
+                href="#work"
+                className="rounded-full bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#120820] shadow-[0_12px_30px_rgba(0,0,0,0.25)]"
+              >
+                View work
+              </Link>
+              <Link
+                href="#contact"
+                className="rounded-full border border-white/35 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white backdrop-blur-sm"
+              >
+                Contact
+              </Link>
+            </div>
           </div>
 
         </div>
