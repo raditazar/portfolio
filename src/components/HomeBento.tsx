@@ -38,7 +38,7 @@ export default function HomeBento({
     // Project cards (up to 3)
     ...projects.slice(0, 3).map((project) => ({
       id: `project-${project.id}`,
-      color: "#060010",
+      color: "#170C28",
       label: project.category,
       title: project.title,
       description: project.description,
@@ -63,14 +63,14 @@ export default function HomeBento({
               <h3 className="text-lg font-bold text-white mb-1">
                 {project.title}
               </h3>
-              <p className="text-xs text-zinc-400 line-clamp-2 mb-3">
+              <p className="text-xs text-zinc-300 line-clamp-2 mb-3">
                 {project.description}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {project.techStack.slice(0, 4).map((tech) => (
                   <span
                     key={tech}
-                    className="px-2 py-0.5 text-[10px] font-medium bg-white/10 text-zinc-300 rounded-full border border-white/5"
+                    className="px-2 py-0.5 text-[10px] font-medium bg-white/10 text-zinc-200 rounded-full border border-white/5"
                   >
                     {tech}
                   </span>
@@ -85,17 +85,17 @@ export default function HomeBento({
     // CTA — View All Projects
     {
       id: "view-all-cta",
-      color: "#07000f",
+      color: "#170C28",
       href: "/projects",
       content: (
         <div className="flex flex-col h-full justify-between group">
           {/* Top badge */}
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/8 border border-white/10 text-zinc-400">
+            <span className="px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 border border-white/15 text-zinc-200">
               Portfolio
             </span>
             {totalProjectCount && totalProjectCount > 3 && (
-              <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-purple-500/15 border border-purple-500/20 text-purple-400">
+              <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300">
                 +{totalProjectCount - 3} more
               </span>
             )}
@@ -103,14 +103,14 @@ export default function HomeBento({
 
           {/* Main content */}
           <div className="mt-auto">
-            <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">
+            <p className="text-xs font-medium text-zinc-400 uppercase tracking-widest">
               See everything I&apos;ve built
             </p>
             <div className="flex items-end justify-between">
               <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight max-w-[70%]">
                 View All Projects
               </h3>
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center group-hover:bg-purple-500/25 group-hover:border-purple-500/40 transition-all duration-300">
                 <svg
                   width="20"
                   height="20"
@@ -118,7 +118,7 @@ export default function HomeBento({
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.8"
-                  className="text-zinc-400 group-hover:text-purple-300 transition-colors duration-300 -rotate-45"
+                  className="text-zinc-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 -rotate-45"
                 >
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
@@ -189,8 +189,8 @@ export default function HomeBento({
       id="work"
       className={`relative ${compact ? "home-bento-compact h-full py-4" : "py-10 pb-8 md:py-12"}`}
     >
-      <div className={`mx-auto px-4 sm:px-5 lg:px-6 ${compact ? "flex h-full max-w-[88rem] flex-col" : "max-w-6xl"}`}>
-        {/* Upgraded header */}
+      <div className={`mx-auto px-4 sm:px-6 lg:px-12 ${compact ? "flex h-full max-w-8xl flex-col" : "max-w-8xl"}`}>
+        {/* Header */}
         <div ref={headerRef} className={compact ? "mb-4 shrink-0" : "mb-10 md:mb-14"}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-px bg-purple-500" />
@@ -201,7 +201,7 @@ export default function HomeBento({
           <h2 className={`${compact ? "text-3xl md:text-4xl" : "text-3xl md:text-5xl"} font-bold text-white mb-3`}>
             Selected Work
           </h2>
-          <p className={`${compact ? "text-sm md:text-base" : "text-base md:text-lg"} text-zinc-500 max-w-md`}>
+          <p className={`${compact ? "text-sm md:text-base" : "text-base md:text-lg"} text-zinc-400 max-w-md`}>
             A curated selection of recent projects and experiments.
           </p>
         </div>
@@ -210,15 +210,14 @@ export default function HomeBento({
             cards={cards}
             enableSpotlight={true}
             enableBorderGlow={true}
-            enableStars={true}
+            enableStars={false}
             enableTilt={false}
             enableMagnetism={true}
             clickEffect={true}
-            glowColor="132, 0, 255"
+            glowColor="147, 51, 234"
           />
         </div>
       </div>
-
     </section>
   );
 }

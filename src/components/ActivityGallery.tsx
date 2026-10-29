@@ -45,7 +45,7 @@ export function ActivityGallery({ className }: { className?: string }) {
           return (
             <motion.div
               key={index}
-              className="relative snap-center cursor-pointer overflow-hidden rounded-[1.5rem] bg-zinc-900/50 sm:rounded-3xl"
+              className="relative snap-center cursor-pointer overflow-hidden rounded-[1.5rem] bg-zinc-900/50 border border-black/10 sm:rounded-3xl"
               initial={false}
               animate={{
                 width: isActive
@@ -78,10 +78,10 @@ export function ActivityGallery({ className }: { className?: string }) {
                     transition={{ duration: 0.25, delay: 0.1 }}
                     className="absolute bottom-0 left-0 z-20 flex w-full flex-col justify-end p-4"
                   >
-                    <p className="text-xs font-semibold uppercase tracking-wider text-white/90">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-white/95">
                       {item.code}
                     </p>
-                    <p className="line-clamp-1 text-[11px] text-zinc-400">
+                    <p className="line-clamp-1 text-[11px] text-zinc-300">
                       {item.alt}
                     </p>
                   </motion.div>

@@ -1,4 +1,4 @@
-﻿import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar";
 import ScrollExperience from "@/components/ScrollExperience";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -91,9 +91,9 @@ export default async function Home() {
   const data = await getHomeData();
 
   return (
-    <main className="min-h-screen bg-[#0B0F14] text-white selection:bg-white selection:text-black overflow-x-clip relative">
+    <main className="min-h-screen bg-[#0E0717] text-white selection:bg-white selection:text-[#120820] overflow-x-clip relative">
       <ArcRevealHero greetingHold={300}>
-        {/* Background LightRays */}
+        {/* Background LightRays in Plum ambience */}
         <HomeLightRays />
 
         <div className="relative z-10">
