@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { TransitionProvider } from "@/components/PageTransition";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import CustomCursor from "@/components/CustomCursor";
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -62,13 +64,16 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={plus_jakarta_sans.className}
+        className={`${plus_jakarta_sans.className} bg-[#0E0717] text-white`}
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: extensionAttributeCleanup }} />
-        <TransitionProvider>
-          {children}
-        </TransitionProvider>
+        <CustomCursor />
+        <SmoothScrollProvider>
+          <TransitionProvider>
+            {children}
+          </TransitionProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

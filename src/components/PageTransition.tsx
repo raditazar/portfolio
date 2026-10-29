@@ -124,7 +124,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         
         {/* Entrance Arc Curtain */}
         {phase === "entrance" && (
-          <svg className="absolute inset-0 h-full w-full fill-[#f5f4f3] pointer-events-auto" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg className="absolute inset-0 h-full w-full fill-[#F4EFE7] pointer-events-auto" viewBox="0 0 100 100" preserveAspectRatio="none">
             <motion.path
               variants={entranceVariants}
               initial="initial"
@@ -135,7 +135,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
         {/* Exit Arc Curtain */}
         {phase === "exit" && (
-          <svg className="absolute inset-0 h-full w-full fill-[#f5f4f3] pointer-events-auto" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg className="absolute inset-0 h-full w-full fill-[#F4EFE7] pointer-events-auto" viewBox="0 0 100 100" preserveAspectRatio="none">
             <motion.path
               variants={exitVariants}
               initial="initial"
@@ -153,7 +153,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
                 animate={{ opacity: phase === "entrance" ? 1 : 0, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25, delay: phase === "entrance" ? 0.3 : 0 }}
-                className="select-none px-6 text-center font-serif text-5xl font-normal tracking-tight text-zinc-900 sm:text-6xl md:text-7xl lowercase"
+                className="select-none px-6 text-center font-serif text-5xl font-normal tracking-tight text-[#120820] sm:text-6xl md:text-7xl lowercase"
               >
                 {targetLabel || pathNamesMap[pathname] || "portfolio"}
               </motion.span>

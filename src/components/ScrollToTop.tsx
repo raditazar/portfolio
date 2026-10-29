@@ -19,7 +19,7 @@ export default function ScrollToTop() {
     <OriginButton
       onClick={scrollToTop}
       aria-label="Back to top"
-      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900/80 p-0 text-zinc-300 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white ${
+      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-[#22396F] bg-[#0D1C42]/90 p-0 text-[#FCF1D0] shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-[#FCF1D0]/40 hover:bg-[#0D1C42] hover:text-[#FCF1D0] cursor-pointer ${
         visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
