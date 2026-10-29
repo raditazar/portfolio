@@ -20,7 +20,6 @@ const socialLinks = [
 ];
 
 // SVG Liquid panel variants (100x100 relative viewbox)
-// Starts from right (x=100), bulges out left, then straightens at x=0
 const curveEase: [number, number, number, number] = [0.76, 0, 0.24, 1];
 
 const curveVariants: Variants = {
@@ -106,23 +105,21 @@ export default function Navbar() {
       >
         <div className="mx-auto flex max-w-8xl items-center justify-between">
           
-          {/* Logo Replacement Hover Effect - Horizontal */}
+          {/* Logo Side-Mask Reveal */}
           <Link 
             href="/" 
             onClick={(e) => handleLinkClick(e, "/", "home")}
             aria-label="Raditazar home"
-            className="group relative flex h-10 w-36 items-center overflow-hidden"
+            className="group relative flex h-10 items-center overflow-hidden select-none cursor-pointer"
           >
+            {/* Brand Icon Anchor */}
             <span
               aria-hidden
-              className="absolute left-0 top-1/2 block h-8 w-8 -translate-y-1/2 bg-white transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] [mask-image:url('/assets/logo_only.png')] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] group-hover:-translate-x-2 group-hover:-translate-y-1/2 group-hover:scale-50 group-hover:rotate-[-10deg] group-hover:opacity-0"
+              className="relative block h-8 w-8 shrink-0 bg-white transition-transform duration-[450ms] ease-[cubic-bezier(0.7,0,0.2,1)] [mask-image:url('/assets/logo_only.png')] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] group-hover:scale-105"
             />
-            <span className="absolute inset-0 flex items-center">
-              <span
-                aria-hidden
-                className="mr-2 h-1.5 w-1.5 scale-0 rounded-full bg-[#e7ff5f] opacity-0 shadow-[0_0_18px_rgba(231,255,95,0.55)] transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-100 group-hover:opacity-100"
-              />
-              <span className="inline-block max-w-0 overflow-hidden whitespace-nowrap font-serif text-lg font-bold tracking-tight text-white opacity-0 blur-sm transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:max-w-28 group-hover:opacity-100 group-hover:blur-0">
+            {/* Revealable Wordmark Mask */}
+            <span className="flex items-center overflow-hidden max-w-0 opacity-0 -translate-x-2 transition-all duration-[450ms] ease-[cubic-bezier(0.7,0,0.2,1)] group-hover:max-w-36 group-hover:opacity-100 group-hover:translate-x-0 group-hover:pl-2.5">
+              <span className="whitespace-nowrap font-serif text-lg font-bold tracking-tight text-white lowercase">
                 raditazar
               </span>
             </span>
@@ -135,7 +132,7 @@ export default function Navbar() {
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleLinkClick(e, item.href, item.label)}
-                className="relative text-xs font-bold uppercase tracking-[0.2em] text-white/70 transition-colors hover:text-white group"
+                className="relative text-xs font-bold uppercase tracking-[0.2em] text-white/78 transition-colors hover:text-white group"
               >
                 {item.label}
                 <span className="absolute bottom-[-4px] left-0 h-[1.5px] w-0 bg-white transition-all duration-300 group-hover:w-full" />
@@ -146,7 +143,7 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Floating menu button */}
+      {/* Floating menu button - Desktop */}
       <AnimatePresence>
         {(isScrolled || isOpen) && (
           <motion.button
@@ -155,32 +152,33 @@ export default function Navbar() {
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
             onClick={() => setIsOpen(!isOpen)}
-            className="fixed right-6 top-6 z-50 hidden h-16 w-16 items-center justify-center rounded-full bg-zinc-50 shadow-lg transition-transform duration-300 hover:scale-105 sm:right-8 md:flex lg:right-16 cursor-pointer"
+            className="fixed right-6 top-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-[#170C28] border border-white/10 text-white shadow-xl transition-transform duration-300 hover:scale-105 sm:right-8 md:flex lg:right-16 cursor-pointer"
             aria-label="Toggle Menu"
             aria-expanded={isOpen}
           >
             <div className="flex flex-col gap-1.5 justify-center items-center">
-              <span className={`h-[2px] w-6 bg-zinc-950 transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[8px]" : ""}`} />
-              <span className={`h-[2px] w-6 bg-zinc-950 transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
-              <span className={`h-[2px] w-6 bg-zinc-950 transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[8px]" : ""}`} />
+              <span className={`h-[2px] w-5 bg-white transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[8px]" : ""}`} />
+              <span className={`h-[2px] w-5 bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
+              <span className={`h-[2px] w-5 bg-white transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[8px]" : ""}`} />
             </div>
           </motion.button>
         )}
       </AnimatePresence>
 
+      {/* Floating menu button - Mobile */}
       <motion.button
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-5 top-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-50 shadow-lg transition-transform duration-300 active:scale-95 md:hidden cursor-pointer"
+        className="fixed right-5 top-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#170C28] border border-white/10 text-white shadow-xl transition-transform duration-300 active:scale-95 md:hidden cursor-pointer"
         aria-label="Toggle Menu"
         aria-expanded={isOpen}
       >
         <div className="flex flex-col gap-1.5 justify-center items-center">
-          <span className={`h-[2px] w-5 bg-zinc-950 transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
-          <span className={`h-[2px] w-5 bg-zinc-950 transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
-          <span className={`h-[2px] w-5 bg-zinc-950 transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
+          <span className={`h-[2px] w-5 bg-white transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+          <span className={`h-[2px] w-5 bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
+          <span className={`h-[2px] w-5 bg-white transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
         </div>
       </motion.button>
 
@@ -194,14 +192,14 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
             />
 
             {/* Sidebar liquid container */}
             <div className="fixed right-0 top-0 z-40 h-screen w-[88vw] min-w-0 max-w-[480px] sm:w-[50vw] md:w-[33vw]">
               
               {/* Animated Liquid Background SVG */}
-              <svg className="absolute left-[-99px] top-0 h-full w-[calc(100%+100px)] fill-[#f5f4f3] pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute left-[-99px] top-0 h-full w-[calc(100%+100px)] fill-[#F4EFE7] pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <motion.path
                   variants={curveVariants}
                   initial="initial"
@@ -228,14 +226,14 @@ export default function Navbar() {
                 
                 {/* Header */}
                 <div className="flex flex-col pt-16">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#120820]/60">
                     Navigation
                   </p>
-                  <div className="mt-4 h-[1px] w-full bg-zinc-300" />
+                  <div className="mt-4 h-[1px] w-full bg-[#120820]/15" />
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-col gap-6 my-auto">
+                <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 my-auto">
                   {navItems.map((item, index) => {
                     return (
                       <motion.div
@@ -247,7 +245,7 @@ export default function Navbar() {
                         <Link
                           href={item.href}
                           onClick={(e) => handleLinkClick(e, item.href, item.label)}
-                          className="group flex items-center text-4xl font-light tracking-tight transition-colors hover:text-zinc-500 md:text-5xl"
+                          className="group flex items-center text-4xl font-light tracking-tight transition-colors hover:text-[#120820]/60 md:text-5xl"
                         >
                           <span className="relative flex items-center">
                             {item.label}
@@ -261,9 +259,9 @@ export default function Navbar() {
 
                 {/* Footer Socials */}
                 <div className="flex flex-col gap-4">
-                  <div className="h-[1px] w-full bg-zinc-300" />
+                  <div className="h-[1px] w-full bg-[#120820]/15" />
                   <div className="flex flex-col gap-2">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-[#120820]/60">
                       Socials
                     </p>
                     <div className="flex flex-wrap gap-4 mt-1">
@@ -273,7 +271,7 @@ export default function Navbar() {
                           href={link.href}
                           target={link.href.startsWith("http") ? "_blank" : undefined}
                           rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="text-xs font-semibold uppercase tracking-wider hover:text-zinc-500 transition-colors"
+                          className="text-xs font-semibold uppercase tracking-wider text-[#120820]/80 hover:text-[#120820] transition-colors"
                         >
                           {link.label}
                         </Link>
