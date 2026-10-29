@@ -63,15 +63,15 @@ export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <main className="min-h-screen bg-[var(--portfolio-bg)] dark:bg-[#0B0F14] text-[var(--portfolio-text)] dark:text-white overflow-x-clip relative">
+    <main className="min-h-screen bg-[#0E0717] text-white overflow-x-clip relative">
       <HomeLightRays />
       <div className="relative z-10">
         <Navbar />
         <div className="pt-32 pb-20">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-8xl mx-auto px-6 sm:px-12">
             <div className="mb-12">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">Projects</h1>
-              <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">Projects</h1>
+              <p className="text-lg text-zinc-400 max-w-2xl">
                 A collection of projects I&apos;ve worked on, from web3
                 applications to AI-powered interfaces.
               </p>

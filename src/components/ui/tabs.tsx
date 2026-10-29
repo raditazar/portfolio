@@ -23,7 +23,7 @@ export function TabSwitcher({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800",
+        "inline-flex items-center gap-1 p-1 rounded-xl bg-[#170C28] border border-white/10",
         className
       )}
     >
@@ -32,10 +32,10 @@ export function TabSwitcher({
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
           className={cn(
-            "px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+            "px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer",
             activeTab === tab.id
-              ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm"
-              : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
+              ? "bg-white/15 text-white shadow-sm font-semibold"
+              : "text-zinc-400 hover:text-white"
           )}
         >
           {tab.label}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TabSwitcher } from "@/components/ui/tabs";
+import ImpactExperience, { ExperienceItemProps } from "@/components/ui/impact-experience";
 
 interface CareerEntry {
   id: string;
@@ -65,88 +66,95 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
   const workEntries = careers.filter((c) => c.type === "work");
   const educationEntries = careers.filter((c) => c.type === "education");
 
+  const workItems: ExperienceItemProps[] =
+    workEntries.length > 0
+      ? workEntries.map((entry, idx) => ({
+          index: String(idx + 1),
+          company: entry.organization,
+          tagline: entry.title,
+          period: `${entry.startDate} — ${entry.isCurrent ? "Present" : entry.endDate || "Present"}`,
+          position: entry.title,
+          location: "Indonesia / Remote",
+          industry: "Software Engineering & Web3",
+          description: [
+            entry.description ||
+              "Building modern web applications and accessible design systems with high technical fidelity.",
+          ],
+          badge: "Role",
+          image:
+            idx === 0
+              ? "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop"
+              : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
+        }))
+      : [
+          {
+            index: "1",
+            company: "Freelance",
+            tagline: "Frontend Developer & Web Engineering",
+            period: "2023 — Present",
+            position: "Frontend Developer",
+            location: "Remote / Indonesia",
+            industry: "Web & AI Engineering",
+            description: [
+              "Building modern web applications with Next.js, React, TypeScript, and Tailwind CSS for various clients.",
+              "Designing fluid micro-interactions and ensuring top performance and accessibility across screen resolutions.",
+            ],
+            badge: "Role",
+            image: "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
+          },
+        ];
+
+  const educationItems: ExperienceItemProps[] =
+    educationEntries.length > 0
+      ? educationEntries.map((entry, idx) => ({
+          index: String(idx + 1),
+          company: entry.organization,
+          tagline: entry.title,
+          period: `${entry.startDate} — ${entry.isCurrent ? "Present" : entry.endDate || "Graduated"}`,
+          position: entry.title,
+          location: "Yogyakarta, Indonesia",
+          industry: "Information Engineering",
+          description: [
+            entry.description ||
+              "Studying Information Engineering with focus on web development, distributed systems, and machine learning.",
+          ],
+          badge: "Academics",
+          image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
+        }))
+      : [
+          {
+            index: "1",
+            company: "Universitas Gadjah Mada",
+            tagline: "Information Engineering Degree",
+            period: "2022 — Present",
+            position: "Undergraduate Student",
+            location: "Yogyakarta, Indonesia",
+            industry: "Higher Education & Tech",
+            description: [
+              "Focusing on computer systems, software architecture, full-stack web technologies, and machine learning foundations.",
+            ],
+            badge: "Academics",
+            image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
+          },
+        ];
+
   return (
-    <div className="space-y-16">
-      {/* Work Experience */}
-      <div>
-        <h2 className="text-2xl font-bold mb-8 text-zinc-900 dark:text-white">
-          Work Experience
-        </h2>
-        <div className="space-y-1">
-          {workEntries.map((entry, idx) => (
-            <TimelineItem key={entry.id} entry={entry} isLast={idx === workEntries.length - 1} />
-          ))}
-          {workEntries.length === 0 && (
-            <p className="text-zinc-500">No work experience entries yet.</p>
-          )}
-        </div>
-      </div>
+    <div className="space-y-12">
+      <ImpactExperience
+        className="bg-transparent py-0 px-0 sm:py-0 sm:px-0 lg:px-0"
+        title="WORK EXPERIENCE"
+        badge="CAREER TRAJECTORY"
+        subtitle="Professional roles & engineering contributions"
+        items={workItems}
+      />
 
-      {/* Education */}
-      <div>
-        <h2 className="text-2xl font-bold mb-8 text-zinc-900 dark:text-white">
-          Education
-        </h2>
-        <div className="space-y-1">
-          {educationEntries.map((entry, idx) => (
-            <TimelineItem key={entry.id} entry={entry} isLast={idx === educationEntries.length - 1} />
-          ))}
-          {educationEntries.length === 0 && (
-            <p className="text-zinc-500">No education entries yet.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function TimelineItem({
-  entry,
-  isLast,
-}: {
-  entry: CareerEntry;
-  isLast: boolean;
-}) {
-  return (
-    <div className="relative flex gap-6">
-      {/* Timeline line */}
-      <div className="flex flex-col items-center">
-        <div
-          className={`w-3 h-3 rounded-full mt-1.5 ${
-            entry.isCurrent
-              ? "bg-purple-500 ring-4 ring-purple-500/20"
-              : "bg-zinc-400 dark:bg-zinc-600"
-          }`}
-        />
-        {!isLast && (
-          <div className="w-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="pb-10">
-        <div className="flex items-center gap-3 mb-1">
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
-            {entry.title}
-          </h3>
-          {entry.isCurrent && (
-            <span className="px-2 py-0.5 text-[10px] font-bold bg-green-500/10 text-green-500 rounded-full border border-green-500/20">
-              Current
-            </span>
-          )}
-        </div>
-        <p className="text-sm font-medium text-purple-500 dark:text-purple-400 mb-1">
-          {entry.organization}
-        </p>
-        <p className="text-xs text-zinc-500 mb-3">
-          {entry.startDate} — {entry.isCurrent ? "Present" : entry.endDate}
-        </p>
-        {entry.description && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
-            {entry.description}
-          </p>
-        )}
-      </div>
+      <ImpactExperience
+        className="bg-transparent py-0 px-0 sm:py-0 sm:px-0 lg:px-0"
+        title="EDUCATION"
+        badge="ACADEMIC BACKGROUND"
+        subtitle="Formal education & technical foundation"
+        items={educationItems}
+      />
     </div>
   );
 }
@@ -156,43 +164,42 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
     <div className="space-y-12">
       {/* Introduction */}
       <div className="space-y-4 max-w-3xl">
-        <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed">
+        <p className="text-lg text-zinc-300 leading-relaxed">
           Based in{" "}
-          <span className="text-zinc-900 dark:text-white font-semibold">
+          <span className="text-white font-semibold">
             {aboutInfo.location}
           </span>
           . I&apos;m{" "}
-          <span className="text-zinc-900 dark:text-white font-semibold">
+          <span className="text-white font-semibold">
             {aboutInfo.name}
           </span>
           , {aboutInfo.bio}
         </p>
-        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <p className="text-zinc-400 leading-relaxed">
           {aboutInfo.bio2}
         </p>
       </div>
 
       {/* Currently Exploring */}
-      <div className="group relative p-8 rounded-2xl bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-500 max-w-2xl">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+      <div className="group relative p-8 rounded-2xl bg-[#170C28] border border-white/10 hover:border-purple-500/40 transition-all duration-500 max-w-2xl">
         <div className="relative">
-          <span className="text-xs font-bold tracking-widest uppercase text-purple-500 dark:text-purple-400 mb-3 block">
+          <span className="text-xs font-bold tracking-widest uppercase text-purple-400 mb-3 block">
             Currently Exploring
           </span>
-          <h3 className="text-2xl font-bold mb-3 text-zinc-900 dark:text-white">
+          <h3 className="text-2xl font-bold mb-3 text-white">
             {aboutInfo.currentlyExploring.title}
           </h3>
-          <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
+          <p className="text-zinc-300 leading-relaxed mb-6">
             {aboutInfo.currentlyExploring.description}
           </p>
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-black/40 rounded-full overflow-hidden border border-white/10">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                className="h-full bg-purple-500 rounded-full"
                 style={{ width: `${aboutInfo.currentlyExploring.progress}%` }}
               />
             </div>
-            <span className="text-xs font-medium text-zinc-500">
+            <span className="text-xs font-medium text-zinc-400">
               {aboutInfo.currentlyExploring.progress}%
             </span>
           </div>
@@ -200,24 +207,24 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-zinc-200 dark:border-zinc-800/50">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-white/10">
         <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white">
+          <p className="text-3xl md:text-4xl font-bold text-white">
             {aboutInfo.stats.years}
           </p>
-          <p className="text-sm text-zinc-500">Years Experience</p>
+          <p className="text-sm text-zinc-400">Years Experience</p>
         </div>
         <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white">
+          <p className="text-3xl md:text-4xl font-bold text-white">
             {aboutInfo.stats.projects}
           </p>
-          <p className="text-sm text-zinc-500">Projects Completed</p>
+          <p className="text-sm text-zinc-400">Projects Completed</p>
         </div>
         <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white">
+          <p className="text-3xl md:text-4xl font-bold text-white">
             {aboutInfo.stats.technologies}
           </p>
-          <p className="text-sm text-zinc-500">Technologies</p>
+          <p className="text-sm text-zinc-400">Technologies</p>
         </div>
       </div>
     </div>

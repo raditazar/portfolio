@@ -111,15 +111,15 @@ export default async function AboutPage() {
   const { careers, aboutInfo } = await getAboutData();
 
   return (
-    <main className="min-h-screen bg-[var(--portfolio-bg)] dark:bg-[#0B0F14] text-[var(--portfolio-text)] dark:text-white overflow-x-clip relative">
+    <main className="min-h-screen bg-[#0E0717] text-white overflow-x-clip relative">
       <HomeLightRays />
       <div className="relative z-10">
         <Navbar />
         <div className="pt-32 pb-20">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-8xl mx-auto px-6 sm:px-12">
             <div className="mb-12">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">About</h1>
-              <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">About</h1>
+              <p className="text-lg text-zinc-400 max-w-2xl">
                 Get to know more about my journey, career, and what drives me.
               </p>
             </div>
