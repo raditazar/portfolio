@@ -38,23 +38,45 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* Hero-Anchored Plum Noir System */
+  --color-canvas-base: #0E0717;
+  --color-canvas-hero: #120820;
+  --color-canvas-surface: #170C28;
+  --color-canvas-border: rgba(255, 255, 255, 0.08);
+  --color-text-white: #FFFFFF;
+  --color-text-muted: rgba(255, 255, 255, 0.75);
+  --color-cream-sheet: #F4EFE7;
+  --color-cream-ink: #120820;
+
   /* Portfolio custom colors */
-  --portfolio-bg: #f5f5f7;
-  --portfolio-text: #1a1a2e;
-  --portfolio-text-muted: #64748b;
-  --portfolio-card-bg: #ffffff;
-  --portfolio-card-border: #e2e8f0;
-  --portfolio-section-bg: #f0f0f3;
+  --portfolio-bg: #0E0717;
+  --portfolio-text: #FFFFFF;
+  --portfolio-text-muted: rgba(255, 255, 255, 0.75);
+  --portfolio-card-bg: #170C28;
+  --portfolio-card-border: rgba(255, 255, 255, 0.08);
+  --portfolio-section-bg: #0E0717;
 }
 
 ::selection {
-  background-color: #ffffff;
-  color: #000;
+  background-color: #FFFFFF;
+  color: #120820;
 }
 
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
+/* Lenis smooth scrolling compatibility */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 /* Custom animations */
@@ -111,26 +133,6 @@ html {
 
 .delay-300 {
   animation-delay: 300ms;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-in-from-bottom {
-  from {
-    transform: translateY(1rem);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 @theme inline {
@@ -207,13 +209,13 @@ html {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* Portfolio dark custom colors */
-  --portfolio-bg: #0B0F14;
-  --portfolio-text: #ffffff;
-  --portfolio-text-muted: #a1a1aa;
-  --portfolio-card-bg: #111827;
-  --portfolio-card-border: rgba(255, 255, 255, 0.1);
-  --portfolio-section-bg: #0d1117;
+  /* Portfolio dark custom colors - Plum Noir */
+  --portfolio-bg: #0E0717;
+  --portfolio-text: #FFFFFF;
+  --portfolio-text-muted: rgba(255, 255, 255, 0.75);
+  --portfolio-card-bg: #170C28;
+  --portfolio-card-border: rgba(255, 255, 255, 0.08);
+  --portfolio-section-bg: #0E0717;
 }
 
 @layer base {
@@ -224,7 +226,6 @@ html {
     @apply bg-background text-foreground;
   }
 }
-
 
 /* Admin form inputs */
 .admin-input {
