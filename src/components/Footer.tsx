@@ -1,166 +1,132 @@
 "use client";
 
-import Link from "next/link";
-import { useRef, useEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import KilnWordmarkFooter, {
+  KilnLink,
+  KilnWordmarkFooterProps,
+} from "@/components/ui/kiln-wordmark-footer";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+export interface FooterProps extends Partial<KilnWordmarkFooterProps> {
+  variant?: "dark-plum" | "linen-stone" | "linen-terracotta";
 }
 
-export default function Footer() {
-  const footerRef = useRef<HTMLElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+export default function Footer({
+  brand = "Raditazar",
+  wordmark = "raditazar",
+  motto = ["Available for work", "Let's collaborate"],
+  address = [
+    "Raditya Azhar Ananta",
+    "↳ Front-End Developer & AI",
+    "Yogyakarta — Indonesia",
+  ],
+  navigation = [
+    [
+      { label: "Home", href: "/" },
+      { label: "Work", href: "/#work" },
+      { label: "Projects", href: "/projects" },
+    ],
+    [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "mailto:radityaazhar@gmail.com" },
+    ],
+  ],
+  socials = [
+    [
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/raditya-azhar-ananta",
+      },
+      { label: "GitHub", href: "https://github.com/raditazar" },
+    ],
+    [
+      { label: "Instagram", href: "https://instagram.com/raditazar_" },
+      { label: "Email", href: "mailto:radityaazhar@gmail.com" },
+    ],
+  ],
+  year = new Date().getFullYear(),
+  registry = "Crafted with Next.js, Tailwind CSS & Motion — Est. 2024",
+  legal = [
+    { label: "radityaazhar@gmail.com", href: "mailto:radityaazhar@gmail.com" },
+    { label: "All Rights Reserved", href: "#" },
+  ],
+  variant = "dark-plum",
+  surface: customSurface,
+  deep: customDeep,
+  ink: customInk,
+  paper: customPaper,
+  weight = 1,
+  lens = true,
+  defaultTile = 0,
+  className = "",
+  ...rest
+}: FooterProps) {
+  // Palettes:
+  // "dark-plum" (Default): Seamless obsidian plum canvas (#0E0717) matching the projects section,
+  //                         with lifted velvet plum tile and warm linen typography.
+  // "linen-stone": Warm Linen cream (#F4EFE7) with stone glaze tile.
+  // "linen-terracotta": Warm Linen cream (#F4EFE7) with terracotta red glaze tile.
+  const palettes = {
+    "dark-plum": {
+      deep: "#0E0717",
+      surface: "#22123B",
+      ink: "#F4EFE7",
+      paper: "#0E0717",
+    },
+    "linen-stone": {
+      deep: "#F4EFE7",
+      surface: "#DECFC0",
+      ink: "#120820",
+      paper: "#F4EFE7",
+    },
+    "linen-terracotta": {
+      deep: "#F4EFE7",
+      surface: "#C42B1C",
+      ink: "#120820",
+      paper: "#F4EFE7",
+    },
+  };
 
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    if (isMobile) return;
+  const selectedPalette = palettes[variant] || palettes["dark-plum"];
+  const deep = customDeep ?? selectedPalette.deep;
+  const surface = customSurface ?? selectedPalette.surface;
+  const ink = customInk ?? selectedPalette.ink;
+  const paper = customPaper ?? selectedPalette.paper;
 
-    const ctx = gsap.context(() => {
-      if (ctaRef.current) {
-        gsap.fromTo(
-          ctaRef.current.children,
-          { opacity: 0, y: 60 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: ctaRef.current,
-              start: "top 85%",
-              once: true,
-            },
-          }
-        );
+  const handleBackToTop = () => {
+    if (typeof window !== "undefined") {
+      const lenis = window.__lenis;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: false });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
-
-      if (bottomRef.current) {
-        gsap.fromTo(
-          bottomRef.current,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.8,
-            delay: 0.3,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: bottomRef.current,
-              start: "top 95%",
-              once: true,
-            },
-          }
-        );
-      }
-    }, footerRef);
-
-    return () => ctx.revert();
-  }, []);
+    }
+  };
 
   return (
-    <footer
-      ref={footerRef}
-      id="contact"
-      className="relative pt-24 pb-10 text-white md:pt-32"
-    >
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* CTA section */}
-        <div ref={ctaRef} className="mb-16 md:mb-24">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-sm font-medium text-zinc-500">
-              Available for work
-            </span>
-          </div>
-
-          <p className="text-2xl md:text-3xl text-gray-400 mb-8">
-            Have an idea? Ready to collaborate?
-          </p>
-
-          <Link
-            href="mailto:radityaazhar@gmail.com"
-            className="block max-w-full break-all text-3xl font-bold leading-tight tracking-tight underline decoration-2 underline-offset-8 decoration-gray-600 transition-colors hover:text-gray-300 hover:decoration-purple-400 sm:text-4xl md:text-7xl lg:text-8xl"
-          >
-            radityaazhar@gmail.com
-          </Link>
-        </div>
-
-        {/* Footer grid */}
-        <div
-          ref={bottomRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8"
-        >
-          {/* Navigation */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
-              Navigation
-            </h4>
-            <div className="flex flex-col gap-2">
-              <Link
-                href="#work"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                Projects
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                About
-              </Link>
-              <Link
-                href="#contact"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                Contact
-              </Link>
-            </div>
-          </div>
-
-          {/* Social */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">
-              Connect
-            </h4>
-            <div className="flex flex-col gap-2">
-              <Link
-                href="https://www.linkedin.com/in/raditya-azhar-ananta"
-                target="_blank"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                LinkedIn ↗
-              </Link>
-              <Link
-                href="https://github.com/raditazar"
-                target="_blank"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                GitHub ↗
-              </Link>
-              <Link
-                href="https://instagram.com/raditazar_"
-                target="_blank"
-                className="text-sm text-zinc-400 hover:text-white transition-colors w-fit"
-              >
-                Instagram ↗
-              </Link>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-12 pt-6 border-t border-white/5">
-          <p className="text-gray-600 text-xs text-center">
-            © {new Date().getFullYear()} Raditya Azhar Ananta. All rights
-            reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
+    <div id="contact" className="relative w-full border-t border-white/10">
+      <KilnWordmarkFooter
+        brand={brand}
+        wordmark={wordmark}
+        motto={motto}
+        address={address}
+        navigationTitle="Navigation"
+        navigation={navigation}
+        followTitle="Connect"
+        socials={socials}
+        year={year}
+        registry={registry}
+        legal={legal}
+        surface={surface}
+        deep={deep}
+        ink={ink}
+        paper={paper}
+        weight={weight}
+        lens={lens}
+        defaultTile={defaultTile}
+        onBackToTop={rest.onBackToTop ?? handleBackToTop}
+        className={className}
+        {...rest}
+      />
+    </div>
   );
 }
