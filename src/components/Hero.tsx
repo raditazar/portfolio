@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +9,7 @@ const socialLinks = [
   { label: "Email", href: "mailto:raditazar@example.com" },
 ];
 
-const heroImageSrc = "/images/hero.png?v=20260708-181859";
+const heroImageSrc = "/images/hero.png";
 
 export default function Hero() {
   return (
@@ -24,13 +24,14 @@ export default function Hero() {
         className="object-cover object-[58%_center] md:object-center"
       />
 
+      {/* Original delicate atmospheric overlays for #120820 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_36%,transparent_0,rgba(18,8,32,0.08)_34%,rgba(18,8,32,0.72)_100%)]" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#120820]/90 via-[#120820]/28 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#120820]/95 via-[#120820]/30 to-transparent" />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-8xl flex-col px-5 pb-8 pt-24 sm:px-8 sm:pb-12 lg:px-16">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-8xl flex-col px-5 pb-8 pt-24 sm:px-8 sm:pb-12 lg:px-16">
 
-        {/* Social links - hide on mobile */}
+        {/* Social links - expansive, edge-reaching */}
         <div className="absolute left-6 top-1/3 hidden gap-3 text-xl font-extrabold uppercase tracking-[0.2em] text-white/78 md:left-8 md:flex lg:left-16 lg:gap-12 lg:text-3xl">
           {socialLinks.map((link) => (
             <Link
@@ -75,10 +76,10 @@ export default function Hero() {
           {/* Judul - kanan bawah (desktop), kiri (mobile) */}
           <div className="flex flex-col justify-start md:justify-between md:flex-1 lg:items-end">
             <div className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-left">
-               Quietly 
+              Quietly 
             </div>
             <h1 className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black leading-[0.78] -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-right">
-                Building
+              Building
             </h1>
             <div className="mt-6 flex flex-wrap gap-3 md:hidden">
               <Link

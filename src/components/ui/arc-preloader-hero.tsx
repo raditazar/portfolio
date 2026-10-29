@@ -45,7 +45,7 @@ type Phase = "intro" | "reveal" | "done";
 
 export function ArcRevealHero({
   greetings = DEFAULT_GREETINGS,
-  greetingHold = 600,
+  greetingHold = 300,
   revealDuration = 1200,
   className,
   introClassName,
@@ -70,6 +70,94 @@ export function ArcRevealHero({
     return `M 0 ${edge} Q 50 ${control} 100 ${edge} L 100 110 L 0 110 Z`;
   });
 
+  const isLocked = phase !== "done";
+
+  // Lock scroll completely while intro and reveal animations are running
+  React.useEffect(() => {
+    if (!isLocked) return;
+    if (typeof window === "undefined") return;
+
+    window.__isScrollLocked = true;
+
+    // Reset scroll to top
+    window.scrollTo(0, 0);
+    const lenis = window.__lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true, force: true });
+      lenis.stop();
+    }
+
+    // Save previous styles and history restoration
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    let prevScrollRestoration: ScrollRestoration | null = null;
+    try {
+      prevScrollRestoration = window.history.scrollRestoration;
+      window.history.scrollRestoration = "manual";
+    } catch {}
+
+    // Lock native document overflow
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("lenis-stopped");
+
+    // Intercept and prevent scroll events (wheel, touchmove, keyboard)
+    const preventScroll = (e: Event) => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    const preventKeys = (e: KeyboardEvent) => {
+      const scrollKeys = [
+        "ArrowUp",
+        "ArrowDown",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+        " ",
+        "Spacebar",
+      ];
+      if (scrollKeys.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", preventScroll, {
+      passive: false,
+      capture: true,
+    });
+    window.addEventListener("touchmove", preventScroll, {
+      passive: false,
+      capture: true,
+    });
+    window.addEventListener("keydown", preventKeys, { capture: true });
+
+    return () => {
+      window.__isScrollLocked = false;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.classList.remove("lenis-stopped");
+
+      if (prevScrollRestoration) {
+        try {
+          window.history.scrollRestoration = prevScrollRestoration;
+        } catch {}
+      }
+
+      window.removeEventListener("wheel", preventScroll, { capture: true });
+      window.removeEventListener("touchmove", preventScroll, { capture: true });
+      window.removeEventListener("keydown", preventKeys, { capture: true });
+
+      const currentLenis = window.__lenis;
+      if (currentLenis) {
+        currentLenis.start();
+        currentLenis.resize();
+      }
+    };
+  }, [isLocked]);
+
   React.useEffect(() => {
     if (prefersReducedMotion) {
       setPhase("done");
@@ -89,6 +177,15 @@ export function ArcRevealHero({
 
   React.useEffect(() => {
     if (phase !== "reveal") return;
+
+    // Safety: ensure scroll is at top and Lenis stopped when entering reveal
+    window.scrollTo(0, 0);
+    const lenis = window.__lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true, force: true });
+      lenis.stop();
+    }
+
     const controls = animate(progress, 1, {
       duration: revealDuration / 1000,
       ease: [0.76, 0, 0.24, 1],
@@ -108,7 +205,7 @@ export function ArcRevealHero({
       suppressHydrationWarning
       aria-label="Hero"
       className={cn(
-        "relative isolate min-h-screen w-full overflow-hidden bg-[#0B0F14] text-white",
+        "relative isolate min-h-screen w-full overflow-hidden bg-[#120820] text-white",
         className,
       )}
     >
@@ -120,18 +217,18 @@ export function ArcRevealHero({
             key="arc-reveal-overlay"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.05, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
             className={cn(
-              "absolute inset-x-0 top-0 z-50 h-screen overflow-hidden bg-transparent",
+              "fixed inset-0 z-50 overflow-hidden bg-transparent touch-none select-none",
               introClassName,
             )}
           >
-            
-            {/* Solid light background during intro */}
+            {/* Solid warm linen background during intro */}
             {phase === "intro" && (
-              <div className="absolute inset-0 bg-zinc-50" />
+              <div className="absolute inset-0 bg-[#F4EFE7]" />
             )}
-<div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+
+            <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
               <AnimatePresence mode="wait">
                 {phase === "intro" && current && (
                   <motion.span
@@ -142,7 +239,7 @@ export function ArcRevealHero({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
                     className={cn(
-                      "select-none px-6 text-center font-serif text-5xl font-normal tracking-tight text-zinc-900 sm:text-6xl md:text-7xl",
+                      "select-none px-6 text-center font-serif text-5xl font-normal tracking-tight text-[#120820] sm:text-6xl md:text-7xl",
                       greetingClassName,
                     )}
                   >
@@ -167,7 +264,7 @@ export function ArcRevealHero({
               <rect
                 width="100"
                 height="100"
-                fill="#fafaf9"
+                fill="#F4EFE7"
                 mask="url(#curtainCutout)"
               />
             </svg>
