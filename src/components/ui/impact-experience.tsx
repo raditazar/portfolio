@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import { ArrowUpRight, Sparkles, ExternalLink, Github } from "lucide-react"
+import React, { useEffect, useRef } from "react"
+import { ArrowUpRight, ExternalLink, Github } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface ExperienceItemProps {
@@ -27,6 +27,110 @@ const DEFAULT_IMAGES: Record<string, string> = {
   "3": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
 }
 
+const GRAIN =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")"
+
+/** Breaks out of the page container so children span viewport edge to edge. */
+export const FullBleed: React.FC<{
+  className?: string
+  children: React.ReactNode
+}> = ({ className, children }) => (
+  <div className={cn("relative left-1/2 w-screen -translate-x-1/2", className)}>
+    {children}
+  </div>
+)
+
+/**
+ * Row wrapper with plum-ember gradient blobs that follow the cursor,
+ * optional blended image and film grain. Active on hover (mouse) or when
+ * the row crosses the viewport centre (touch devices).
+ */
+export const GradientHover: React.FC<{
+  image?: string
+  alt?: string
+  className?: string
+  children: React.ReactNode
+}> = ({ image, alt = "", className, children }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const raf = useRef(0)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof window === "undefined") return
+    if (!window.matchMedia("(hover: none)").matches) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        el.dataset.active = entry.isIntersecting ? "true" : "false"
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => () => cancelAnimationFrame(raf.current), [])
+
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return
+    const el = ref.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const x = e.clientX - r.left
+    const y = e.clientY - r.top
+    cancelAnimationFrame(raf.current)
+    raf.current = requestAnimationFrame(() => {
+      el.style.setProperty("--mx", `${x}px`)
+      el.style.setProperty("--my", `${y}px`)
+    })
+  }
+
+  return (
+    <div
+      ref={ref}
+      data-active="false"
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse" && ref.current) ref.current.dataset.active = "true"
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse" && ref.current) ref.current.dataset.active = "false"
+      }}
+      onPointerMove={onMove}
+      className={cn("group relative overflow-hidden", className)}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700 ease-out group-data-[active=true]:opacity-100"
+      >
+        {image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={image}
+            alt={alt}
+            className="absolute inset-0 h-full w-full scale-100 object-cover opacity-35 mix-blend-luminosity transition-transform duration-1000 ease-out group-data-[active=true]:scale-105 motion-reduce:transition-none"
+          />
+        )}
+        <div className="absolute inset-0 bg-[#0E0717]/55" />
+        <div
+          className="absolute h-[70vh] w-[55vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,#C0267F,transparent)] opacity-80 blur-3xl mix-blend-screen transition-[left,top] duration-500 ease-out motion-reduce:transition-none"
+          style={{ left: "var(--mx, 35%)", top: "var(--my, 50%)" }}
+        />
+        <div
+          className="absolute h-[55vh] w-[40vw] max-w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,#F59E0B,transparent)] opacity-60 blur-3xl mix-blend-screen transition-[left,top] duration-[900ms] ease-out motion-reduce:transition-none"
+          style={{
+            left: "calc(var(--mx, 35%) + 16vw)",
+            top: "calc(var(--my, 50%) + 12vh)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.18] mix-blend-overlay"
+          style={{ backgroundImage: GRAIN }}
+        />
+      </div>
+      <div className="relative z-10">{children}</div>
+    </div>
+  )
+}
+
 export const ExperienceItem: React.FC<ExperienceItemProps> = ({
   index,
   className,
@@ -44,162 +148,104 @@ export const ExperienceItem: React.FC<ExperienceItemProps> = ({
   badge = "Company",
 }) => {
   const bgImage = image || DEFAULT_IMAGES[index]
+  const href = (u: string) => (u.startsWith("http") ? u : `https://${u}`)
+
+  const meta: [string, string][] = [
+    ["Position", position],
+    ["Location", location],
+    ["Industry", industry],
+  ]
 
   return (
-    <div className={cn("relative group transition-all duration-300", className)}>
-      {/* Atmospheric Hover Reveal Image & Gradient Mesh */}
-      {bgImage && (
-        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none rounded-xl">
-          <img
-            src={bgImage}
-            alt={`${company} preview`}
-            className="w-full h-full object-cover opacity-0 group-hover:opacity-30 scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
-          />
-          {/* Plum Noir dual gradient to guarantee crisp legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0E0717]/95 via-[#170C28]/90 to-[#0E0717]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
-      )}
-
-      <div
-        className={cn(
-          "grid grid-cols-1 md:grid-cols-12 gap-8 py-10 md:py-14 px-6 md:px-10 z-10 relative w-full",
-          "rounded-xl border border-white/10 bg-[#170C28]/60 backdrop-blur-xs group-hover:bg-[#170C28]/85 group-hover:border-[#F4EFE7]/25 transition-all duration-300"
-        )}
-      >
-        {/* Left Column: Company / Project Identity */}
-        <div className="md:col-span-4 lg:col-span-3 space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#F4EFE7]/70 group-hover:text-[#F4EFE7] transition-colors">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F4EFE7]/80" />
-            <span>0{index} / {badge}</span>
+    <GradientHover
+      image={bgImage}
+      alt={`${company} preview`}
+      className={cn("border-b border-white/10", className)}
+    >
+      <div className="grid grid-cols-1 gap-x-10 gap-y-10 px-6 py-12 sm:px-12 md:grid-cols-12 md:py-20">
+        {/* Identity — wide, oversized */}
+        <div className="md:col-span-7">
+          <div className="mb-4 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#F4EFE7]/60">
+            <span>{badge}</span>
+            <span className="h-px w-10 bg-[#F4EFE7]/30" />
+            <span className="tabular-nums">{period}</span>
           </div>
 
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white group-hover:text-[#F4EFE7] transition-colors duration-300 leading-tight">
-            {company}
-          </h3>
-
-          <div className="space-y-1.5">
-            <p className="text-sm text-zinc-400 group-hover:text-zinc-200 font-medium transition-colors">
-              {tagline}
-            </p>
-            <p className="text-xs sm:text-sm text-[#F4EFE7]/85 font-mono tabular-nums">
-              {period}
-            </p>
+          <div className="flex items-start gap-4 md:gap-6">
+            <span
+              className="select-none text-[clamp(2.5rem,6vw,5.5rem)] font-extrabold leading-[0.9] tracking-tighter text-transparent transition-[-webkit-text-stroke-color] duration-500 [-webkit-text-stroke:1px_rgba(244,239,231,0.35)] group-data-[active=true]:[-webkit-text-stroke:1px_rgba(244,239,231,0.9)]"
+              aria-hidden
+            >
+              {String(index).padStart(2, "0")}
+            </span>
+            <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] font-extrabold uppercase leading-[0.9] tracking-tighter text-white transition-transform duration-500 ease-out group-data-[active=true]:translate-x-2 motion-reduce:transform-none">
+              {company}
+            </h3>
           </div>
+
+          <p className="mt-6 max-w-xl text-lg font-semibold text-zinc-200 md:ml-[calc(clamp(2.5rem,6vw,5.5rem)*1.6)]">
+            {tagline}
+          </p>
 
           {tags && tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-2">
-              {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-0.5 text-[11px] font-mono font-medium bg-white/5 border border-white/10 text-zinc-300 rounded group-hover:border-[#F4EFE7]/20 transition-colors"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <p className="mt-4 max-w-xl font-mono text-xs uppercase tracking-wider text-zinc-400 md:ml-[calc(clamp(2.5rem,6vw,5.5rem)*1.6)]">
+              {tags.join(" / ")}
+            </p>
           )}
         </div>
 
-        {/* Middle Column: Metadata Grid */}
-        <div className="md:col-span-4 space-y-4 relative z-10">
-          <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-sm">
-            <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
-              Position
-            </span>
-            <span className="font-semibold text-white group-hover:text-[#F4EFE7] transition-colors">
-              {position}
-            </span>
-
-            <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
-              Location
-            </span>
-            <span className="font-semibold text-white group-hover:text-[#F4EFE7] transition-colors">
-              {location}
-            </span>
-
-            <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
-              Industry
-            </span>
-            <span className="font-semibold text-white group-hover:text-[#F4EFE7] transition-colors">
-              {industry}
-            </span>
-
+        {/* Details — narrower, dropped lower for asymmetry */}
+        <div className="space-y-8 md:col-span-5 md:pt-10">
+          <dl className="grid grid-cols-[7rem_1fr] gap-y-3 text-sm">
+            {meta.map(([k, v]) => (
+              <React.Fragment key={k}>
+                <dt className="font-mono text-xs uppercase tracking-wider text-zinc-400">{k}</dt>
+                <dd className="text-base font-bold text-white">{v}</dd>
+              </React.Fragment>
+            ))}
             {website && (
               <>
-                <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
-                  Website
-                </span>
-                <a
-                  href={website.startsWith("http") ? website : `https://${website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-[#F4EFE7] hover:text-white border-b border-[#F4EFE7]/40 hover:border-white w-fit inline-flex items-center gap-1 transition-colors"
-                >
-                  {website.replace(/^https?:\/\//, "")} <ArrowUpRight className="w-3.5 h-3.5 text-xs" />
-                </a>
+                <dt className="font-mono text-xs uppercase tracking-wider text-zinc-400">Website</dt>
+                <dd>
+                  <a
+                    href={href(website)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-fit items-center gap-1 border-b border-[#F4EFE7]/50 text-base font-bold text-[#F4EFE7] transition-colors hover:border-white hover:text-white"
+                  >
+                    {website.replace(/^https?:\/\//, "")}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </dd>
               </>
             )}
-
             {github && (
               <>
-                <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300">
-                  Source
-                </span>
-                <a
-                  href={github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-zinc-300 hover:text-white border-b border-zinc-600 hover:border-white w-fit inline-flex items-center gap-1 transition-colors"
-                >
-                  <Github className="w-3.5 h-3.5 text-xs" /> GitHub <ExternalLink className="w-3 h-3 text-xs" />
-                </a>
+                <dt className="font-mono text-xs uppercase tracking-wider text-zinc-400">Source</dt>
+                <dd>
+                  <a
+                    href={github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-fit items-center gap-1.5 border-b border-zinc-500 text-base font-bold text-zinc-200 transition-colors hover:border-white hover:text-white"
+                  >
+                    <Github className="h-4 w-4" /> GitHub <ExternalLink className="h-3 w-3" />
+                  </a>
+                </dd>
               </>
             )}
-          </div>
-        </div>
+          </dl>
 
-        {/* Right Column: Descriptions */}
-        <div className="md:col-span-4 lg:col-span-5 space-y-4 relative z-10 flex flex-col justify-between">
-          <div className="space-y-3">
+          <div className="space-y-4">
             {description.map((para, i) => (
-              <p
-                key={i}
-                className="text-sm md:text-base leading-relaxed text-zinc-300 group-hover:text-zinc-100 transition-colors text-pretty"
-              >
+              <p key={i} className="text-pretty text-base leading-relaxed text-zinc-300 group-data-[active=true]:text-zinc-100">
                 {para}
               </p>
             ))}
           </div>
-
-          {(website || github) && (
-            <div className="pt-2 flex items-center gap-3">
-              {website && (
-                <a
-                  href={website.startsWith("http") ? website : `https://${website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#F4EFE7] text-[#120820] hover:bg-white transition-colors"
-                >
-                  <span>Visit Platform</span>
-                  <ArrowUpRight className="w-3 h-3" />
-                </a>
-              )}
-              {github && (
-                <a
-                  href={github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium border border-white/20 text-zinc-200 hover:text-white hover:bg-white/10 transition-colors"
-                >
-                  <Github className="w-3.5 h-3.5" />
-                  <span>Repository</span>
-                </a>
-              )}
-            </div>
-          )}
         </div>
       </div>
-    </div>
+    </GradientHover>
   )
 }
 
@@ -262,41 +308,36 @@ export const ImpactExperience: React.FC<ImpactExperienceProps> = ({
   containerClassName,
   title = "EXPERIENCE",
   badge = "CAREER & CONTRIBUTIONS",
-  subtitle = "Interactive timeline • Hover rows to unveil contextual previews",
+  subtitle = "Hover rows to unveil contextual previews",
   items = DEFAULT_ITEMS,
   hideHeader = false,
 }) => {
   return (
-    <section className={cn("bg-[#0E0717] py-12 sm:py-16 px-4 sm:px-6 lg:px-8", className)}>
-      <div className={cn("max-w-7xl mx-auto space-y-4", containerClassName)}>
-        {/* Section Header */}
-        {!hideHeader && (
-          <div className="px-6 md:px-10 py-8 md:py-10 bg-[#170C28]/80 border border-white/10 rounded-2xl flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4EFE7]/10 border border-[#F4EFE7]/20 text-xs font-mono font-medium text-[#F4EFE7] mb-3">
-                <Sparkles className="w-3.5 h-3.5 text-[#F4EFE7]" />
-                <span>{badge}</span>
+    <FullBleed>
+      <section className={cn("text-white", className)}>
+        <div className={containerClassName}>
+          {!hideHeader && (
+            <div className="border-t border-white/10 border-b px-6 pb-8 pt-10 sm:px-12 md:pb-10 md:pt-14">
+              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <h2 className="text-[clamp(3.5rem,11vw,10rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.04em] text-white">
+                  {title}
+                </h2>
+                <div className="space-y-1 font-mono text-xs uppercase tracking-widest text-zinc-400 md:max-w-[16rem] md:pb-3 md:text-right">
+                  <p className="text-[#F4EFE7]">{badge}</p>
+                  {subtitle && <p className="normal-case tracking-normal">{subtitle}</p>}
+                </div>
               </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white">
-                {title}
-              </h2>
             </div>
-            {subtitle && (
-              <p className="text-xs sm:text-sm font-mono text-zinc-400">
-                {subtitle}
-              </p>
-            )}
-          </div>
-        )}
+          )}
 
-        {/* Experience Items List */}
-        <div className="space-y-4">
-          {items.map((item) => (
-            <ExperienceItem key={item.index} {...item} />
-          ))}
+          <div className={hideHeader ? "border-t border-white/10" : undefined}>
+            {items.map((item) => (
+              <ExperienceItem key={item.index} {...item} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </FullBleed>
   )
 }
 

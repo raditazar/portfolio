@@ -69,9 +69,11 @@ export default async function ProjectsPage() {
         <Navbar />
         <div className="pt-32 pb-20">
           <div className="max-w-8xl mx-auto px-6 sm:px-12">
-            <div className="mb-12">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">Projects</h1>
-              <p className="text-lg text-zinc-400 max-w-2xl">
+            <div className="mb-12 grid md:grid-cols-12 gap-y-6">
+              <h1 className="md:col-span-12 text-[clamp(4rem,14vw,13rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.05em] text-white">
+                Projects
+              </h1>
+              <p className="md:col-start-8 md:col-span-5 text-base text-zinc-400">
                 A collection of projects I&apos;ve worked on, from web3
                 applications to AI-powered interfaces.
               </p>

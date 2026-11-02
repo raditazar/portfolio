@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TabSwitcher } from "@/components/ui/tabs";
-import ImpactExperience, { ExperienceItemProps } from "@/components/ui/impact-experience";
+import ImpactExperience, { ExperienceItemProps, FullBleed, GradientHover } from "@/components/ui/impact-experience";
 
 interface CareerEntry {
   id: string;
@@ -139,9 +139,8 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
         ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-24">
       <ImpactExperience
-        className="bg-transparent py-0 px-0 sm:py-0 sm:px-0 lg:px-0"
         title="WORK EXPERIENCE"
         badge="CAREER TRAJECTORY"
         subtitle="Professional roles & engineering contributions"
@@ -149,7 +148,6 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
       />
 
       <ImpactExperience
-        className="bg-transparent py-0 px-0 sm:py-0 sm:px-0 lg:px-0"
         title="EDUCATION"
         badge="ACADEMIC BACKGROUND"
         subtitle="Formal education & technical foundation"
@@ -160,73 +158,80 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
 }
 
 function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
+  const stats = [
+    { value: aboutInfo.stats.years, label: "Years Experience" },
+    { value: aboutInfo.stats.projects, label: "Projects Completed" },
+    { value: aboutInfo.stats.technologies, label: "Technologies" },
+  ];
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-24">
       {/* Introduction */}
-      <div className="space-y-4 max-w-3xl">
-        <p className="text-lg text-zinc-300 leading-relaxed">
+      <div className="grid md:grid-cols-12 gap-y-8 gap-x-10">
+        <p className="md:col-span-10 text-[clamp(1.75rem,3.5vw,3rem)] font-semibold leading-[1.15] tracking-tight text-zinc-400">
           Based in{" "}
-          <span className="text-white font-semibold">
-            {aboutInfo.location}
-          </span>
+          <span className="text-white font-extrabold">{aboutInfo.location}</span>
           . I&apos;m{" "}
-          <span className="text-white font-semibold">
-            {aboutInfo.name}
-          </span>
-          , {aboutInfo.bio}
+          <span className="text-white font-extrabold">{aboutInfo.name}</span>,{" "}
+          {aboutInfo.bio}
         </p>
-        <p className="text-zinc-400 leading-relaxed">
+        <p className="md:col-start-8 md:col-span-5 text-base text-zinc-400 leading-relaxed">
           {aboutInfo.bio2}
         </p>
       </div>
 
       {/* Currently Exploring */}
-      <div className="group relative p-8 rounded-2xl bg-[#170C28] border border-white/10 hover:border-purple-500/40 transition-all duration-500 max-w-2xl">
-        <div className="relative">
-          <span className="text-xs font-bold tracking-widest uppercase text-purple-400 mb-3 block">
-            Currently Exploring
-          </span>
-          <h3 className="text-2xl font-bold mb-3 text-white">
-            {aboutInfo.currentlyExploring.title}
-          </h3>
-          <p className="text-zinc-300 leading-relaxed mb-6">
-            {aboutInfo.currentlyExploring.description}
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-black/40 rounded-full overflow-hidden border border-white/10">
-              <div
-                className="h-full bg-purple-500 rounded-full"
-                style={{ width: `${aboutInfo.currentlyExploring.progress}%` }}
-              />
+      <FullBleed>
+        <GradientHover className="border-y border-white/10">
+          <div className="grid md:grid-cols-12 gap-x-10 gap-y-8 px-6 sm:px-12 py-12 md:py-20">
+            <div className="md:col-span-8">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#F4EFE7]/60 block mb-4">
+                Currently Exploring
+              </span>
+              <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] font-extrabold uppercase leading-[0.9] tracking-tighter text-white transition-transform duration-500 group-data-[active=true]:translate-x-2 motion-reduce:transform-none">
+                {aboutInfo.currentlyExploring.title}
+              </h3>
             </div>
-            <span className="text-xs font-medium text-zinc-400">
-              {aboutInfo.currentlyExploring.progress}%
-            </span>
+            <div className="md:col-span-4 md:pt-10 space-y-6">
+              <p className="text-base text-zinc-300 leading-relaxed">
+                {aboutInfo.currentlyExploring.description}
+              </p>
+              <div className="flex items-end gap-4">
+                <span className="text-[clamp(4rem,9vw,8rem)] font-extrabold leading-[0.8] tracking-tighter text-transparent [-webkit-text-stroke:1px_rgba(244,239,231,0.6)]">
+                  {aboutInfo.currentlyExploring.progress}%
+                </span>
+              </div>
+              <div className="h-px w-full bg-white/15">
+                <div
+                  className="h-px bg-[#F4EFE7]"
+                  style={{ width: `${aboutInfo.currentlyExploring.progress}%` }}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </GradientHover>
+      </FullBleed>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-white/10">
-        <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-white">
-            {aboutInfo.stats.years}
-          </p>
-          <p className="text-sm text-zinc-400">Years Experience</p>
-        </div>
-        <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-white">
-            {aboutInfo.stats.projects}
-          </p>
-          <p className="text-sm text-zinc-400">Projects Completed</p>
-        </div>
-        <div className="space-y-2">
-          <p className="text-3xl md:text-4xl font-bold text-white">
-            {aboutInfo.stats.technologies}
-          </p>
-          <p className="text-sm text-zinc-400">Technologies</p>
-        </div>
-      </div>
+      <FullBleed>
+        <GradientHover className="border-y border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-x-10 gap-y-10 px-6 sm:px-12 py-12 md:py-20">
+            {stats.map((s, i) => (
+              <div
+                key={s.label}
+                className={`md:col-span-4 ${i === 1 ? "md:pt-12" : i === 2 ? "md:pt-24" : ""}`}
+              >
+                <p className="text-[clamp(4rem,10vw,9rem)] font-extrabold leading-[0.85] tracking-[-0.05em] text-white">
+                  {s.value}
+                </p>
+                <p className="mt-3 font-mono text-xs uppercase tracking-widest text-zinc-400">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </GradientHover>
+      </FullBleed>
     </div>
   );
 }
