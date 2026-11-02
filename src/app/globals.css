@@ -259,3 +259,21 @@ html, body {
 html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
 }
+
+/* Liquid blob morph for row hover (impact-experience) */
+@keyframes blob-morph-a {
+  0%   { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(-50%, -50%) rotate(0deg); }
+  33%  { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: translate(-50%, -50%) rotate(90deg); }
+  66%  { border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%; transform: translate(-50%, -50%) rotate(200deg); }
+  100% { border-radius: 40% 60% 60% 40% / 70% 50% 40% 30%; transform: translate(-50%, -50%) rotate(320deg); }
+}
+@keyframes blob-morph-b {
+  0%   { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: translate(-50%, -50%) rotate(0deg); }
+  50%  { border-radius: 70% 30% 40% 60% / 60% 30% 70% 40%; transform: translate(-50%, -50%) rotate(-140deg); }
+  100% { border-radius: 30% 70% 60% 40% / 50% 60% 30% 60%; transform: translate(-50%, -50%) rotate(-300deg); }
+}
+.animate-blob-a { animation: blob-morph-a 7s ease-in-out infinite alternate; }
+.animate-blob-b { animation: blob-morph-b 11s ease-in-out infinite alternate-reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob-a, .animate-blob-b { animation: none; transform: translate(-50%, -50%); }
+}

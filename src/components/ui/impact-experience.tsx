@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useId, useRef } from "react"
 import { ArrowUpRight, ExternalLink, Github } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -41,9 +41,10 @@ export const FullBleed: React.FC<{
 )
 
 /**
- * Row wrapper with plum-ember gradient blobs that follow the cursor,
- * optional blended image and film grain. Active on hover (mouse) or when
- * the row crosses the viewport centre (touch devices).
+ * Row wrapper with liquid-morph gradient blobs that chase the cursor,
+ * stretch along movement, shift hue by position/speed, warp the project
+ * image (SVG displacement) and swap the native cursor for a "VIEW" disc.
+ * Full effect: mouse only. Touch: fade in when row crosses viewport centre.
  */
 export const GradientHover: React.FC<{
   image?: string
@@ -51,82 +52,232 @@ export const GradientHover: React.FC<{
   className?: string
   children: React.ReactNode
 }> = ({ image, alt = "", className, children }) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const raf = useRef(0)
+  const rowRef = useRef<HTMLDivElement>(null)
+  const layerRef = useRef<HTMLDivElement>(null)
+  const leadRef = useRef<HTMLDivElement>(null)
+  const trailRef = useRef<HTMLDivElement>(null)
+  const dotRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const dispRef = useRef<SVGFEDisplacementMapElement>(null)
+  const turbRef = useRef<SVGFETurbulenceElement>(null)
+  const filterId = `disp-${useId().replace(/[^a-zA-Z0-9]/g, "")}`
+  const wild = useRef(false)
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el || typeof window === "undefined") return
-    if (!window.matchMedia("(hover: none)").matches) return
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        el.dataset.active = entry.isIntersecting ? "true" : "false"
-      },
-      { rootMargin: "-45% 0px -45% 0px" }
+  const sim = useRef({
+    tx: 0, ty: 0, lx: 0, ly: 0, rx: 0, ry: 0, dx: 0, dy: 0,
+    vx: 0, vy: 0, speed: 0, angle: 0, disp: 0, w: 1,
+    active: false, raf: 0,
+  })
+
+  const tick = (time: number) => {
+    const s = sim.current
+    const plx = s.lx
+    const ply = s.ly
+    s.lx += (s.tx - s.lx) * 0.18
+    s.ly += (s.ty - s.ly) * 0.18
+    s.rx += (s.tx - s.rx) * 0.07
+    s.ry += (s.ty - s.ry) * 0.07
+    s.dx += (s.tx - s.dx) * 0.35
+    s.dy += (s.ty - s.dy) * 0.35
+
+    s.vx += (s.lx - plx - s.vx) * 0.25
+    s.vy += (s.ly - ply - s.vy) * 0.25
+    const mag = Math.hypot(s.vx, s.vy)
+    if (mag > 0.6) s.angle = (Math.atan2(s.vy, s.vx) * 180) / Math.PI
+    s.speed += (Math.min(mag / 40, 1) - s.speed) * 0.2
+
+    const sp = s.speed
+    if (leadRef.current) {
+      leadRef.current.style.transform = `translate3d(${s.lx}px,${s.ly}px,0) rotate(${s.angle}deg) scale(${1 + sp * 0.9},${1 - sp * 0.45})`
+    }
+    if (trailRef.current) {
+      trailRef.current.style.transform = `translate3d(${s.rx}px,${s.ry}px,0) rotate(${s.angle}deg) scale(${1 + sp * 0.5},${1 - sp * 0.25})`
+    }
+    if (dotRef.current) dotRef.current.style.transform = `translate3d(${s.dx}px,${s.dy}px,0)`
+    if (layerRef.current) {
+      const hue = (s.lx / s.w) * 70 - 35 + sp * 40
+      layerRef.current.style.filter = `hue-rotate(${hue}deg)`
+    }
+    s.disp += ((s.active ? 10 + sp * 90 : 0) - s.disp) * 0.12
+    dispRef.current?.setAttribute("scale", s.disp.toFixed(1))
+    turbRef.current?.setAttribute(
+      "baseFrequency",
+      (0.012 + Math.sin(time / 1500) * 0.003).toFixed(4)
     )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
 
-  useEffect(() => () => cancelAnimationFrame(raf.current), [])
+    if (s.active || sp > 0.01 || s.disp > 0.5) {
+      s.raf = requestAnimationFrame(tick)
+    } else {
+      s.raf = 0
+    }
+  }
+
+  const start = () => {
+    if (!sim.current.raf) sim.current.raf = requestAnimationFrame(tick)
+  }
+
+  // setup: capability detection, static placement, touch in-view activation
+  useEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    const s = sim.current
+    const touch = window.matchMedia("(hover: none)").matches
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    wild.current = !touch && !reduced
+    row.dataset.wild = String(wild.current)
+
+    const place = () => {
+      const r = row.getBoundingClientRect()
+      s.w = r.width || 1
+      const x = r.width * 0.35
+      const y = r.height * 0.5
+      s.lx = s.tx = x
+      s.ly = s.ty = y
+      s.rx = x + r.width * 0.12
+      s.ry = y + r.height * 0.15
+      s.dx = x
+      s.dy = y
+      if (leadRef.current) leadRef.current.style.transform = `translate3d(${s.lx}px,${s.ly}px,0)`
+      if (trailRef.current) trailRef.current.style.transform = `translate3d(${s.rx}px,${s.ry}px,0)`
+    }
+    place()
+    if (wild.current && imgRef.current) imgRef.current.style.filter = `url(#${filterId})`
+
+    let io: IntersectionObserver | undefined
+    if (touch) {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          row.dataset.active = entry.isIntersecting ? "true" : "false"
+        },
+        { rootMargin: "-45% 0px -45% 0px" }
+      )
+      io.observe(row)
+    }
+    const onResize = () => {
+      if (!s.active) place()
+    }
+    window.addEventListener("resize", onResize)
+    return () => {
+      io?.disconnect()
+      window.removeEventListener("resize", onResize)
+      cancelAnimationFrame(s.raf)
+      s.raf = 0
+    }
+  }, [filterId])
+
+  const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
+    const row = rowRef.current
+    if (!row || e.pointerType !== "mouse") return
+    row.dataset.active = "true"
+    if (!wild.current) return
+    const r = row.getBoundingClientRect()
+    const s = sim.current
+    s.w = r.width || 1
+    s.tx = e.clientX - r.left
+    s.ty = e.clientY - r.top
+    s.dx = s.tx
+    s.dy = s.ty
+    s.active = true
+    start()
+  }
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse") return
-    const el = ref.current
-    if (!el) return
-    const r = el.getBoundingClientRect()
-    const x = e.clientX - r.left
-    const y = e.clientY - r.top
-    cancelAnimationFrame(raf.current)
-    raf.current = requestAnimationFrame(() => {
-      el.style.setProperty("--mx", `${x}px`)
-      el.style.setProperty("--my", `${y}px`)
-    })
+    const row = rowRef.current
+    if (!row || !wild.current || e.pointerType !== "mouse") return
+    const r = row.getBoundingClientRect()
+    const s = sim.current
+    s.tx = e.clientX - r.left
+    s.ty = e.clientY - r.top
+    row.dataset.link = String(!!(e.target as Element).closest("a"))
+    s.active = true
+    start()
+  }
+
+  const onLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+    const row = rowRef.current
+    if (!row || e.pointerType !== "mouse") return
+    row.dataset.active = "false"
+    row.dataset.link = "false"
+    sim.current.active = false
+    if (wild.current) start()
   }
 
   return (
     <div
-      ref={ref}
+      ref={rowRef}
       data-active="false"
-      onPointerEnter={(e) => {
-        if (e.pointerType === "mouse" && ref.current) ref.current.dataset.active = "true"
-      }}
-      onPointerLeave={(e) => {
-        if (e.pointerType === "mouse" && ref.current) ref.current.dataset.active = "false"
-      }}
+      data-link="false"
+      data-wild="false"
+      onPointerEnter={onEnter}
       onPointerMove={onMove}
-      className={cn("group relative overflow-hidden", className)}
+      onPointerLeave={onLeave}
+      className={cn(
+        "group relative overflow-hidden data-[wild=true]:cursor-none data-[wild=true]:[&_a]:cursor-none",
+        className
+      )}
     >
+      {image && (
+        <svg aria-hidden width="0" height="0" className="absolute">
+          <filter id={filterId} x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence
+              ref={turbRef}
+              type="fractalNoise"
+              baseFrequency="0.012"
+              numOctaves="2"
+              seed="3"
+              result="noise"
+            />
+            <feDisplacementMap
+              ref={dispRef}
+              in="SourceGraphic"
+              in2="noise"
+              scale="0"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </svg>
+      )}
+
       <div
+        ref={layerRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700 ease-out group-data-[active=true]:opacity-100"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-0 transition-opacity duration-700 ease-out group-data-[active=true]:opacity-100"
       >
         {image && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            ref={imgRef}
             src={image}
             alt={alt}
-            className="absolute inset-0 h-full w-full scale-100 object-cover opacity-35 mix-blend-luminosity transition-transform duration-1000 ease-out group-data-[active=true]:scale-105 motion-reduce:transition-none"
+            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 mix-blend-luminosity"
           />
         )}
         <div className="absolute inset-0 bg-[#0E0717]/55" />
-        <div
-          className="absolute h-[70vh] w-[55vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,#C0267F,transparent)] opacity-80 blur-3xl mix-blend-screen transition-[left,top] duration-500 ease-out motion-reduce:transition-none"
-          style={{ left: "var(--mx, 35%)", top: "var(--my, 50%)" }}
-        />
-        <div
-          className="absolute h-[55vh] w-[40vw] max-w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,#F59E0B,transparent)] opacity-60 blur-3xl mix-blend-screen transition-[left,top] duration-[900ms] ease-out motion-reduce:transition-none"
-          style={{
-            left: "calc(var(--mx, 35%) + 16vw)",
-            top: "calc(var(--my, 50%) + 12vh)",
-          }}
-        />
+        <div ref={trailRef} className="absolute left-0 top-0 will-change-transform">
+          <div className="animate-blob-b h-[360px] w-[420px] bg-[radial-gradient(closest-side,#F59E0B,#B91C1C_60%,transparent)] opacity-60 blur-2xl mix-blend-screen" />
+        </div>
+        <div ref={leadRef} className="absolute left-0 top-0 will-change-transform">
+          <div className="animate-blob-a h-[440px] w-[500px] bg-[radial-gradient(closest-side,#D6288A,#7A1F6B_65%,transparent)] opacity-85 blur-2xl mix-blend-screen" />
+        </div>
         <div
           className="absolute inset-0 opacity-[0.18] mix-blend-overlay"
           style={{ backgroundImage: GRAIN }}
         />
       </div>
+
       <div className="relative z-10">{children}</div>
+
+      <div
+        ref={dotRef}
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-0 z-20 hidden group-data-[wild=true]:block"
+      >
+        <div className="flex h-[72px] w-[72px] -translate-x-1/2 -translate-y-1/2 scale-0 items-center justify-center rounded-full bg-[#F4EFE7] font-mono text-[10px] font-bold uppercase tracking-widest text-[#120820] mix-blend-difference transition-transform duration-300 ease-out group-data-[active=true]:scale-100 group-data-[link=true]:scale-[1.6]">
+          <span className="group-data-[link=true]:hidden">View</span>
+          <span className="hidden group-data-[link=true]:inline">Open</span>
+        </div>
+      </div>
     </div>
   )
 }
