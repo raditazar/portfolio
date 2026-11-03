@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 export default function CustomCursor() {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -59,7 +61,7 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (!isVisible) return null;
+  if (!isVisible || pathname === "/") return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none">

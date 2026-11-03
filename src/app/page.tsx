@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import ScrollExperience from "@/components/ScrollExperience";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import LiquidCursor from "@/components/LiquidCursor";
 import { ArcRevealHero } from "@/components/ui/arc-preloader-hero";
 
 export const dynamic = "force-dynamic";
@@ -108,6 +109,7 @@ export default async function Home() {
 
         <ScrollToTop />
       </ArcRevealHero>
+      <LiquidCursor />
     </main>
   );
 }

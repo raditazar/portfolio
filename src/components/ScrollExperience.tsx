@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Hero from "./Hero";
 import { ActivityGallery } from "./ActivityGallery";
 import { ProjectShowcase } from "./ui/project-showcase";
+import { SplitHighlight } from "./ui/split-highlight";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -139,11 +140,20 @@ export default function ScrollExperience({
           {/* Left Panel - Text */}
           <div
             ref={leftPanelRef}
-            className="pointer-events-auto absolute left-0 top-0 bottom-0 flex h-full items-center justify-center bg-[#F4EFE7] px-6 text-[#120820] md:px-12"
+            className="pointer-events-auto absolute left-0 top-0 bottom-0 flex h-full items-center justify-center overflow-hidden bg-[#F4EFE7] px-6 text-[#120820] md:px-12"
           >
             <div className="max-w-xl">
               <p className="mb-5 text-xs font-black uppercase tracking-[0.28em] text-[#120820]">Get to know me</p>
-              <h2 className="font-serif text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[0.85] tracking-[-0.06em] text-[#120820]">About Me</h2>
+              <SplitHighlight
+                as="h2"
+                wrapperClassName="w-fit"
+                rect={{ top: "-12%", left: "-100vw", right: "38%", bottom: "46%" }}
+                rectClass="bg-[#120820]"
+                inkColor="#F4EFE7"
+                className="font-serif text-[clamp(2.5rem,6vw,5.5rem)] font-black leading-[0.85] tracking-[-0.06em] text-[#120820]"
+              >
+                About Me
+              </SplitHighlight>
               <div className="my-6 h-px w-20 bg-[#120820]" />
               <div className="space-y-4 text-sm font-semibold leading-relaxed text-zinc-700 md:text-base">
                 <p>Based in <span className="text-[#120820] font-bold">Yogyakarta</span>. I&apos;m <span className="text-[#120820] font-bold">Raditya Azhar Ananta</span>, an Information Engineering student who treats code as a creative medium.</p>
@@ -183,10 +193,19 @@ export default function ScrollExperience({
       </div>
 
       {/* Mobile Flow - Clean sequential stacking without negative margin hack */}
-      <div id="about" className="relative z-40 bg-[#F4EFE7] px-5 py-16 text-[#120820] md:hidden sm:px-8">
+      <div id="about" className="relative z-40 overflow-hidden bg-[#F4EFE7] px-5 py-16 text-[#120820] md:hidden sm:px-8">
         <div className="mx-auto mb-10 max-w-xl">
           <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-[#120820]">Get to know me</p>
-          <h2 className="font-serif text-5xl font-black leading-none text-[#120820]">About Me</h2>
+          <SplitHighlight
+            as="h2"
+            wrapperClassName="w-fit"
+            rect={{ top: "-12%", left: "-100vw", right: "38%", bottom: "46%" }}
+            rectClass="bg-[#120820]"
+            inkColor="#F4EFE7"
+            className="font-serif text-5xl font-black leading-none text-[#120820]"
+          >
+            About Me
+          </SplitHighlight>
           <div className="my-6 h-px w-20 bg-[#120820]" />
           <div className="space-y-4 text-sm font-semibold leading-6 text-zinc-700">
             <p>Based in <span className="text-[#120820] font-bold">Yogyakarta</span>. I&apos;m <span className="text-[#120820] font-bold">Raditya Azhar Ananta</span>, an Information Engineering student who treats code as a creative medium.</p>

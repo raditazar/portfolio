@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { SplitHighlight } from "@/components/ui/split-highlight";
 
 const socialLinks = [
   { label: "GitHub", href: "https://github.com/raditazar" },
@@ -78,9 +79,13 @@ export default function Hero() {
             <div className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-left">
               Quietly 
             </div>
-            <h1 className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black leading-[0.78] -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-right">
+            <SplitHighlight
+              as="h1"
+              rect={{ top: "48%", left: "22%", right: "-100vw", bottom: "-18%" }}
+              className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black leading-[0.78] -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-right"
+            >
               Building
-            </h1>
+            </SplitHighlight>
             <div className="mt-6 flex flex-wrap gap-3 md:hidden">
               <Link
                 href="#work"

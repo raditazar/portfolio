@@ -277,3 +277,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 @media (prefers-reduced-motion: reduce) {
   .animate-blob-a, .animate-blob-b { animation: none; transform: translate(-50%, -50%); }
 }
+
+/* Landing liquid cursor replaces the native cursor */
+html[data-liquid-cursor], html[data-liquid-cursor] * { cursor: none !important; }

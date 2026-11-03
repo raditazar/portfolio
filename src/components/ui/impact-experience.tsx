@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef } from "react"
 import { ArrowUpRight, ExternalLink, Github } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { SplitHighlight } from "@/components/ui/split-highlight"
 
 export interface ExperienceItemProps {
   index: string
@@ -470,9 +471,14 @@ export const ImpactExperience: React.FC<ImpactExperienceProps> = ({
           {!hideHeader && (
             <div className="border-t border-white/10 border-b px-6 pb-8 pt-10 sm:px-12 md:pb-10 md:pt-14">
               <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                <h2 className="text-[clamp(3.5rem,11vw,10rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.04em] text-white">
+                <SplitHighlight
+                  as="h2"
+                  wrapperClassName="w-fit"
+                  rect={{ top: "-10%", left: "40%", right: "-100vw", bottom: "50%" }}
+                  className="text-[clamp(3.5rem,11vw,10rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.04em] text-white"
+                >
                   {title}
-                </h2>
+                </SplitHighlight>
                 <div className="space-y-1 font-mono text-xs uppercase tracking-widest text-zinc-400 md:max-w-[16rem] md:pb-3 md:text-right">
                   <p className="text-[#F4EFE7]">{badge}</p>
                   {subtitle && <p className="normal-case tracking-normal">{subtitle}</p>}
