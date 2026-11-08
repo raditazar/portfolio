@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { parseBody, requireAuth, revalidatePublic, serverError } from "@/lib/api";
+import { projectSchema } from "@/lib/validation";
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,44 +14,23 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(projects);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to fetch projects" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return serverError("Failed to fetch projects", err);
   }
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
+  const { data, error } = await parseBody(req, projectSchema);
+  if (error) return error;
+
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const project = await prisma.project.create({
-      data: {
-        title: body.title,
-        description: body.description,
-        category: body.category,
-        categoryColor: body.categoryColor || "text-blue-400",
-        techStack: body.techStack || [],
-        imageSrc: body.imageSrc,
-        imageAlt: body.imageAlt,
-        liveUrl: body.liveUrl,
-        githubUrl: body.githubUrl,
-        caseStudyUrl: body.caseStudyUrl,
-        isFeatured: body.isFeatured || false,
-        order: body.order || 0,
-      },
-    });
-
+    const project = await prisma.project.create({ data });
+    revalidatePublic();
     return NextResponse.json(project, { status: 201 });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to create project" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return serverError("Failed to create project", err);
   }
 }

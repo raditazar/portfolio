@@ -1,51 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { dbError, parseBody, requireAuth, revalidatePublic } from "@/lib/api";
+import { careerUpdateSchema } from "@/lib/validation";
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+type Ctx = { params: Promise<{ id: string }> };
+
+export async function PUT(req: NextRequest, { params }: Ctx) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
+  // Unknown keys (id, createdAt, ...) sent back by the form are stripped by the schema.
+  const { data, error } = await parseBody(req, careerUpdateSchema);
+  if (error) return error;
+
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { id } = await params;
-    const body = await req.json();
-    const entry = await prisma.careerEntry.update({
-      where: { id },
-      data: body,
-    });
-
+    const entry = await prisma.careerEntry.update({ where: { id }, data });
+    revalidatePublic();
     return NextResponse.json(entry);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to update career entry" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return dbError("Failed to update career entry", err);
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+export async function DELETE(_req: NextRequest, { params }: Ctx) {
+  const denied = await requireAuth();
+  if (denied) return denied;
 
+  try {
     const { id } = await params;
     await prisma.careerEntry.delete({ where: { id } });
-
+    revalidatePublic();
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to delete career entry" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return dbError("Failed to delete career entry", err);
   }
 }

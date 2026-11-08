@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { parseBody, requireAuth, revalidatePublic, serverError } from "@/lib/api";
+import { careerSchema } from "@/lib/validation";
 
 export async function GET() {
   try {
@@ -8,40 +9,23 @@ export async function GET() {
       orderBy: { order: "asc" },
     });
     return NextResponse.json(entries);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to fetch career entries" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return serverError("Failed to fetch career entries", err);
   }
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
+  const { data, error } = await parseBody(req, careerSchema);
+  if (error) return error;
+
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const entry = await prisma.careerEntry.create({
-      data: {
-        type: body.type,
-        title: body.title,
-        organization: body.organization,
-        description: body.description,
-        startDate: body.startDate,
-        endDate: body.endDate,
-        isCurrent: body.isCurrent || false,
-        order: body.order || 0,
-      },
-    });
-
+    const entry = await prisma.careerEntry.create({ data });
+    revalidatePublic();
     return NextResponse.json(entry, { status: 201 });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to create career entry" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return serverError("Failed to create career entry", err);
   }
 }
