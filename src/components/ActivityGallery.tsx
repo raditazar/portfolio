@@ -4,37 +4,19 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { DEFAULT_GALLERY, type GalleryData } from "@/lib/content-defaults";
 
-const activities = [
-  {
-    src: "/images/setup.webp",
-    alt: "Coding setup in Yogyakarta",
-    code: "Setup - Yogyakarta",
-  },
-  {
-    src: "/images/workshop.webp",
-    alt: "Web3 Workshop & Bootcamp",
-    code: "Web3 - Workshop",
-  },
-  {
-    src: "/images/team.webp",
-    alt: "Team Discussion & Workflow",
-    code: "Team - Sync",
-  },
-  {
-    src: "/images/coinfest.webp",
-    alt: "Coinfest 2025 - Event",
-    code: "Coinfest - 2025",
-  },
-  {
-    src: "/images/public-speaking.webp",
-    alt: "Public Speaking & Presentation",
-    code: "Public Speaking",
-  }
-];
-
-export function ActivityGallery({ className }: { className?: string }) {
+export function ActivityGallery({
+  className,
+  items = DEFAULT_GALLERY,
+}: {
+  className?: string;
+  items?: GalleryData[];
+}) {
+  const activities = items;
   const [activeImage, setActiveImage] = useState<number | null>(0);
+
+  if (activities.length === 0) return null;
 
   return (
     <div className={cn("w-full py-4", className)}>
@@ -44,7 +26,7 @@ export function ActivityGallery({ className }: { className?: string }) {
 
           return (
             <motion.div
-              key={index}
+              key={item.id}
               className="relative snap-center cursor-pointer overflow-hidden rounded-[1.5rem] bg-zinc-900/50 border border-black/10 sm:rounded-3xl"
               initial={false}
               animate={{
@@ -79,10 +61,10 @@ export function ActivityGallery({ className }: { className?: string }) {
                     className="absolute bottom-0 left-0 z-20 flex w-full flex-col justify-end p-4"
                   >
                     <p className="text-xs font-semibold uppercase tracking-wider text-white/95">
-                      {item.code}
+                      {item.title}
                     </p>
                     <p className="line-clamp-1 text-[11px] text-zinc-300">
-                      {item.alt}
+                      {item.caption || item.alt}
                     </p>
                   </motion.div>
                 )}

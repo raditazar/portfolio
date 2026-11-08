@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  DEFAULT_PROFILE,
+  DEFAULT_SOCIALS,
+  socialHref,
+  type ProfileData,
+  type SocialData,
+} from "@/lib/content-defaults";
 import KilnWordmarkFooter, {
   KilnLink,
   KilnWordmarkFooterProps,
@@ -7,47 +14,23 @@ import KilnWordmarkFooter, {
 
 export interface FooterProps extends Partial<KilnWordmarkFooterProps> {
   variant?: "dark-plum" | "linen-stone" | "linen-terracotta";
+  /** CMS content. Falls back to defaults when omitted. */
+  profile?: ProfileData;
+  socialLinks?: SocialData[];
 }
 
 export default function Footer({
+  profile = DEFAULT_PROFILE,
+  socialLinks = DEFAULT_SOCIALS,
   brand = "Raditazar",
   wordmark = "raditazar",
   motto = ["Available for work", "Let's collaborate"],
-  address = [
-    "Raditya Azhar Ananta",
-    "↳ Front-End Developer & AI",
-    "Yogyakarta — Indonesia",
-  ],
-  navigation = [
-    [
-      { label: "Home", href: "/" },
-      { label: "Work", href: "/#work" },
-      { label: "Projects", href: "/projects" },
-    ],
-    [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "mailto:radityaazhar@gmail.com" },
-    ],
-  ],
-  socials = [
-    [
-      {
-        label: "LinkedIn",
-        href: "https://www.linkedin.com/in/raditya-azhar-ananta",
-      },
-      { label: "GitHub", href: "https://github.com/raditazar" },
-    ],
-    [
-      { label: "Instagram", href: "https://instagram.com/raditazar_" },
-      { label: "Email", href: "mailto:radityaazhar@gmail.com" },
-    ],
-  ],
+  address,
+  navigation,
+  socials,
   year = new Date().getFullYear(),
   registry = "Crafted with Next.js, Tailwind CSS & Motion — Est. 2024",
-  legal = [
-    { label: "radityaazhar@gmail.com", href: "mailto:radityaazhar@gmail.com" },
-    { label: "All Rights Reserved", href: "#" },
-  ],
+  legal,
   variant = "dark-plum",
   surface: customSurface,
   deep: customDeep,
@@ -59,6 +42,40 @@ export default function Footer({
   className = "",
   ...rest
 }: FooterProps) {
+  const footerSocials = socialLinks.filter((s) => s.showInFooter);
+  const email = socialLinks.find((s) => s.kind === "email");
+  const emailHref = email ? socialHref(email) : undefined;
+  const links: KilnLink[] = footerSocials.map((s) => ({
+    label: s.label,
+    href: socialHref(s),
+  }));
+  if (profile.cvUrl) links.push({ label: "CV", href: profile.cvUrl });
+  // The footer template lays links out in columns of two.
+  const socialColumns: KilnLink[][] = [];
+  for (let i = 0; i < links.length; i += 2) socialColumns.push(links.slice(i, i + 2));
+
+  address ??= [
+    profile.name,
+    `↳ ${profile.title}`,
+    `${profile.location} — Indonesia`,
+  ];
+  navigation ??= [
+    [
+      { label: "Home", href: "/" },
+      { label: "Work", href: "/#work" },
+      { label: "Projects", href: "/projects" },
+    ],
+    [
+      { label: "About", href: "/about" },
+      ...(emailHref ? [{ label: "Contact", href: emailHref }] : []),
+    ],
+  ];
+  socials ??= socialColumns;
+  legal ??= [
+    ...(email ? [{ label: email.url.replace(/^mailto:/i, ""), href: emailHref! }] : []),
+    { label: "All Rights Reserved", href: "#" },
+  ];
+
   // Palettes:
   // "dark-plum" (Default): Seamless obsidian plum canvas (#0E0717) matching the projects section,
   //                         with lifted velvet plum tile and warm linen typography.

@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePageTransition } from "./PageTransition";
+import { DEFAULT_SOCIALS, socialHref, type SocialData } from "@/lib/content-defaults";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -13,11 +14,6 @@ const navItems = [
   { label: "Contact", href: "#contact" },
 ];
 
-const socialLinks = [
-  { label: "GitHub", href: "https://github.com/raditazar" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/raditya-azhar-ananta" },
-  { label: "Email", href: "mailto:raditazar@example.com" },
-];
 
 // SVG Liquid panel variants (100x100 relative viewbox)
 const curveEase: [number, number, number, number] = [0.76, 0, 0.24, 1];
@@ -52,7 +48,18 @@ const curveVariants: Variants = {
   }
 };
 
-export default function Navbar() {
+interface NavbarProps {
+  socials?: SocialData[];
+  cvUrl?: string | null;
+}
+
+export default function Navbar({ socials = DEFAULT_SOCIALS, cvUrl = null }: NavbarProps) {
+  const socialLinks = [
+    ...socials
+      .filter((s) => s.showInNavbar)
+      .map((s) => ({ label: s.label, href: socialHref(s) })),
+    ...(cvUrl ? [{ label: "CV", href: cvUrl }] : []),
+  ];
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();

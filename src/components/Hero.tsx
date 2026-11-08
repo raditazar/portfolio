@@ -3,22 +3,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SplitHighlight } from "@/components/ui/split-highlight";
+import {
+  DEFAULT_PROFILE,
+  DEFAULT_SOCIALS,
+  socialHref,
+  type ProfileData,
+  type SocialData,
+} from "@/lib/content-defaults";
 
-const socialLinks = [
-  { label: "GitHub", href: "https://github.com/raditazar" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/raditya-azhar-ananta" },
-  { label: "Email", href: "mailto:raditazar@example.com" },
-];
+interface HeroProps {
+  profile?: ProfileData;
+  socials?: SocialData[];
+}
 
-const heroImageSrc = "/images/hero.png";
+export default function Hero({
+  profile = DEFAULT_PROFILE,
+  socials = DEFAULT_SOCIALS,
+}: HeroProps) {
+  const socialLinks = socials
+    .filter((s) => s.showInHero)
+    .map((s) => ({ label: s.label, href: socialHref(s) }));
 
-export default function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-[#120820] text-white">
       <Image
-        key={heroImageSrc}
-        src={heroImageSrc}
-        alt="Raditya Azhar Ananta portrait"
+        key={profile.heroImage}
+        src={profile.heroImage}
+        alt={`${profile.name} portrait`}
         fill
         priority
         sizes="100vw"
@@ -50,10 +61,10 @@ export default function Hero() {
         {/* ML focus text - desktop only */}
         <div className="absolute right-8 top-1/3 hidden max-w-xs text-right lg:right-16 lg:block">
           <p className="text-xl font-bold leading-5 text-white/90">
-            Machine learning focus
+            {profile.heroFocusTitle}
           </p>
           <p className="mt-2 text-xs leading-5 text-white/65">
-            since 2024.
+            {profile.heroFocusSince}
           </p>
         </div>
 
@@ -66,25 +77,24 @@ export default function Hero() {
           {/* Deskripsi - pojok kiri bawah */}
           <div className="max-w-md lg:max-w-lg">
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/70 sm:text-[11px]">
-              Front-End Developer · Yogyakarta
+              {profile.title} · {profile.location}
             </p>
             <p className="text-sm leading-6 text-white/72 sm:text-base sm:leading-7">
-              Building ML-powered interfaces and on-chain applications with a
-              focus on clarity, motion, and usable product systems.
+              {profile.heroTagline}
             </p>
           </div>
 
           {/* Judul - kanan bawah (desktop), kiri (mobile) */}
           <div className="flex flex-col justify-start md:justify-between md:flex-1 lg:items-end">
             <div className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-left">
-              Quietly 
+              {profile.heroHeadlineTop}
             </div>
             <SplitHighlight
               as="h1"
               rect={{ top: "48%", left: "22%", right: "-100vw", bottom: "-18%" }}
               className="font-serif text-[clamp(3.2rem,12vw,12rem)] font-black leading-[0.78] -tracking-wide text-white drop-shadow-[0_24px_50px_rgba(0,0,0,0.4)] md:text-right"
             >
-              Building
+              {profile.heroHeadlineBottom}
             </SplitHighlight>
             <div className="mt-6 flex flex-wrap gap-3 md:hidden">
               <Link

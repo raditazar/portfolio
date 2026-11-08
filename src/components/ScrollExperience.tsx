@@ -7,6 +7,12 @@ import Hero from "./Hero";
 import { ActivityGallery } from "./ActivityGallery";
 import { ProjectShowcase } from "./ui/project-showcase";
 import { SplitHighlight } from "./ui/split-highlight";
+import {
+  lowerFirst,
+  type GalleryData,
+  type ProfileData,
+  type SocialData,
+} from "@/lib/content-defaults";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -28,12 +34,17 @@ interface Project {
 interface ScrollExperienceProps {
   projects: Project[];
   totalProjectCount: number;
-  stats: { projects: number; technologies: number };
+  profile: ProfileData;
+  socials: SocialData[];
+  gallery: GalleryData[];
 }
 
 export default function ScrollExperience({
   projects,
   totalProjectCount,
+  profile,
+  socials,
+  gallery,
 }: ScrollExperienceProps) {
   const rootRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -132,7 +143,7 @@ export default function ScrollExperience({
 
         {/* Layer 2: Hero Section (with ref to fade out during transition) */}
         <div ref={heroContainerRef} className="absolute inset-0 z-10">
-          <Hero />
+          <Hero profile={profile} socials={socials} />
         </div>
 
         {/* Layer 3: About Panels - Warm Linen Editorial */}
@@ -156,8 +167,8 @@ export default function ScrollExperience({
               </SplitHighlight>
               <div className="my-6 h-px w-20 bg-[#120820]" />
               <div className="space-y-4 text-sm font-semibold leading-relaxed text-zinc-700 md:text-base">
-                <p>Based in <span className="text-[#120820] font-bold">Yogyakarta</span>. I&apos;m <span className="text-[#120820] font-bold">Raditya Azhar Ananta</span>, an Information Engineering student who treats code as a creative medium.</p>
-                <p>Previously leading a team as a student organization head, I learned how to bridge technical execution with human empathy. My goal isn&apos;t just to build websites, but to build <span className="text-[#120820] font-bold">digital experiences</span> that feel natural and intuitive.</p>
+                <p>Based in <span className="text-[#120820] font-bold">{profile.location}</span>. I&apos;m <span className="text-[#120820] font-bold">{profile.name}</span>, {lowerFirst(profile.bio)}</p>
+                {profile.bio2 && <p>{profile.bio2}</p>}
               </div>
             </div>
           </div>
@@ -168,7 +179,7 @@ export default function ScrollExperience({
             className="pointer-events-auto absolute right-0 top-0 bottom-0 flex h-full items-center justify-center bg-[#F4EFE7] px-4 md:px-10"
           >
             <div className="w-full max-w-2xl">
-              <ActivityGallery />
+              <ActivityGallery items={gallery} />
             </div>
           </div>
         </div>
@@ -183,13 +194,13 @@ export default function ScrollExperience({
           className="absolute left-[47.5vw] top-1/2 z-50 h-[112vh] w-[5vw] overflow-hidden bg-[#120820] pointer-events-none"
         >
           <div className="absolute left-1/2 top-1/2 h-screen w-screen -translate-x-1/2 -translate-y-1/2">
-            <Hero />
+            <Hero profile={profile} socials={socials} />
           </div>
         </div>
       </div>
 
       <div className="md:hidden">
-        <Hero />
+        <Hero profile={profile} socials={socials} />
       </div>
 
       {/* Mobile Flow - Clean sequential stacking without negative margin hack */}
@@ -208,11 +219,11 @@ export default function ScrollExperience({
           </SplitHighlight>
           <div className="my-6 h-px w-20 bg-[#120820]" />
           <div className="space-y-4 text-sm font-semibold leading-6 text-zinc-700">
-            <p>Based in <span className="text-[#120820] font-bold">Yogyakarta</span>. I&apos;m <span className="text-[#120820] font-bold">Raditya Azhar Ananta</span>, an Information Engineering student who treats code as a creative medium.</p>
-            <p>Previously leading a team as a student organization head, I learned how to bridge technical execution with human empathy. My goal isn&apos;t just to build websites, but to build <span className="text-[#120820] font-bold">digital experiences</span> that feel natural and intuitive.</p>
+            <p>Based in <span className="text-[#120820] font-bold">{profile.location}</span>. I&apos;m <span className="text-[#120820] font-bold">{profile.name}</span>, {lowerFirst(profile.bio)}</p>
+            {profile.bio2 && <p>{profile.bio2}</p>}
           </div>
         </div>
-        <ActivityGallery className="mx-auto max-w-xl" />
+        <ActivityGallery items={gallery} className="mx-auto max-w-xl" />
       </div>
 
       <div className="relative z-40 bg-[#0E0717] py-12 px-5 text-white md:hidden sm:px-8">

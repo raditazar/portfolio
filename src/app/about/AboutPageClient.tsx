@@ -4,38 +4,14 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TabSwitcher } from "@/components/ui/tabs";
 import ImpactExperience, { ExperienceItemProps, FullBleed, GradientHover } from "@/components/ui/impact-experience";
-
-interface CareerEntry {
-  id: string;
-  type: string;
-  title: string;
-  organization: string;
-  description?: string | null;
-  startDate: string;
-  endDate?: string | null;
-  isCurrent: boolean;
-}
-
-interface AboutInfo {
-  name: string;
-  location: string;
-  bio: string;
-  bio2: string;
-  currentlyExploring: {
-    title: string;
-    description: string;
-    progress: number;
-  };
-  technologies: string[];
-  stats: { years: string; projects: string; technologies: string };
-}
+import { lowerFirst, type CareerData, type ProfileData } from "@/lib/content-defaults";
 
 export default function AboutPageClient({
   careers,
-  aboutInfo,
+  profile,
 }: {
-  careers: CareerEntry[];
-  aboutInfo: AboutInfo;
+  careers: CareerData[];
+  profile: ProfileData;
 }) {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") || "career";
@@ -56,19 +32,17 @@ export default function AboutPageClient({
       {activeTab === "career" ? (
         <CareerTab careers={careers} />
       ) : (
-        <MeTab aboutInfo={aboutInfo} />
+        <MeTab profile={profile} />
       )}
     </>
   );
 }
 
-function CareerTab({ careers }: { careers: CareerEntry[] }) {
+function CareerTab({ careers }: { careers: CareerData[] }) {
   const workEntries = careers.filter((c) => c.type === "work");
   const educationEntries = careers.filter((c) => c.type === "education");
 
-  const workItems: ExperienceItemProps[] =
-    workEntries.length > 0
-      ? workEntries.map((entry, idx) => ({
+  const workItems: ExperienceItemProps[] = workEntries.map((entry, idx) => ({
           index: String(idx + 1),
           company: entry.organization,
           tagline: entry.title,
@@ -85,28 +59,9 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
             idx === 0
               ? "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop"
               : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
-        }))
-      : [
-          {
-            index: "1",
-            company: "Freelance",
-            tagline: "Frontend Developer & Web Engineering",
-            period: "2023 — Present",
-            position: "Frontend Developer",
-            location: "Remote / Indonesia",
-            industry: "Web & AI Engineering",
-            description: [
-              "Building modern web applications with Next.js, React, TypeScript, and Tailwind CSS for various clients.",
-              "Designing fluid micro-interactions and ensuring top performance and accessibility across screen resolutions.",
-            ],
-            badge: "Role",
-            image: "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
-          },
-        ];
+        }));
 
-  const educationItems: ExperienceItemProps[] =
-    educationEntries.length > 0
-      ? educationEntries.map((entry, idx) => ({
+  const educationItems: ExperienceItemProps[] = educationEntries.map((entry, idx) => ({
           index: String(idx + 1),
           company: entry.organization,
           tagline: entry.title,
@@ -120,48 +75,36 @@ function CareerTab({ careers }: { careers: CareerEntry[] }) {
           ],
           badge: "Academics",
           image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
-        }))
-      : [
-          {
-            index: "1",
-            company: "Universitas Gadjah Mada",
-            tagline: "Information Engineering Degree",
-            period: "2022 — Present",
-            position: "Undergraduate Student",
-            location: "Yogyakarta, Indonesia",
-            industry: "Higher Education & Tech",
-            description: [
-              "Focusing on computer systems, software architecture, full-stack web technologies, and machine learning foundations.",
-            ],
-            badge: "Academics",
-            image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
-          },
-        ];
+        }));
 
   return (
     <div className="space-y-24">
+      {workItems.length > 0 && (
       <ImpactExperience
         title="WORK EXPERIENCE"
         badge="CAREER TRAJECTORY"
         subtitle="Professional roles & engineering contributions"
         items={workItems}
       />
+      )}
 
+      {educationItems.length > 0 && (
       <ImpactExperience
         title="EDUCATION"
         badge="ACADEMIC BACKGROUND"
         subtitle="Formal education & technical foundation"
         items={educationItems}
       />
+      )}
     </div>
   );
 }
 
-function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
+function MeTab({ profile }: { profile: ProfileData }) {
   const stats = [
-    { value: aboutInfo.stats.years, label: "Years Experience" },
-    { value: aboutInfo.stats.projects, label: "Projects Completed" },
-    { value: aboutInfo.stats.technologies, label: "Technologies" },
+    { value: profile.statYears, label: "Years Experience" },
+    { value: profile.statProjects, label: "Projects Completed" },
+    { value: profile.statTechnologies, label: "Technologies" },
   ];
 
   return (
@@ -170,13 +113,13 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
       <div className="grid md:grid-cols-12 gap-y-8 gap-x-10">
         <p className="md:col-span-10 text-[clamp(1.75rem,3.5vw,3rem)] font-semibold leading-[1.15] tracking-tight text-zinc-400">
           Based in{" "}
-          <span className="text-white font-extrabold">{aboutInfo.location}</span>
+          <span className="text-white font-extrabold">{profile.location}</span>
           . I&apos;m{" "}
-          <span className="text-white font-extrabold">{aboutInfo.name}</span>,{" "}
-          {aboutInfo.bio}
+          <span className="text-white font-extrabold">{profile.name}</span>,{" "}
+          {lowerFirst(profile.bio)}
         </p>
         <p className="md:col-start-8 md:col-span-5 text-base text-zinc-400 leading-relaxed">
-          {aboutInfo.bio2}
+          {profile.bio2}
         </p>
       </div>
 
@@ -189,22 +132,22 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
                 Currently Exploring
               </span>
               <h3 className="text-[clamp(2.5rem,6vw,5.5rem)] font-extrabold uppercase leading-[0.9] tracking-tighter text-white transition-transform duration-500 group-data-[active=true]:translate-x-2 motion-reduce:transform-none">
-                {aboutInfo.currentlyExploring.title}
+                {profile.exploringTitle}
               </h3>
             </div>
             <div className="md:col-span-4 md:pt-10 space-y-6">
               <p className="text-base text-zinc-300 leading-relaxed">
-                {aboutInfo.currentlyExploring.description}
+                {profile.exploringDescription}
               </p>
               <div className="flex items-end gap-4">
                 <span className="text-[clamp(4rem,9vw,8rem)] font-extrabold leading-[0.8] tracking-tighter text-transparent [-webkit-text-stroke:1px_rgba(244,239,231,0.6)]">
-                  {aboutInfo.currentlyExploring.progress}%
+                  {profile.exploringProgress}%
                 </span>
               </div>
               <div className="h-px w-full bg-white/15">
                 <div
                   className="h-px bg-[#F4EFE7]"
-                  style={{ width: `${aboutInfo.currentlyExploring.progress}%` }}
+                  style={{ width: `${profile.exploringProgress}%` }}
                 />
               </div>
             </div>
@@ -232,6 +175,18 @@ function MeTab({ aboutInfo }: { aboutInfo: AboutInfo }) {
           </div>
         </GradientHover>
       </FullBleed>
+
+      {/* Technologies */}
+      {profile.technologies.length > 0 && (
+        <div className="grid md:grid-cols-12 gap-x-10 gap-y-6">
+          <p className="md:col-span-3 font-mono text-xs uppercase tracking-widest text-zinc-400">
+            Technologies
+          </p>
+          <p className="md:col-span-9 text-[clamp(1.5rem,3vw,2.5rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-white">
+            {profile.technologies.join(" / ")}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
