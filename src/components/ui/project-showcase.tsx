@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { ArrowUpRight, Sparkles } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 
 export interface ProjectShowcaseItem {
   id?: string
@@ -54,8 +54,6 @@ const defaultProjects: ProjectShowcaseItem[] = [
 export interface ProjectShowcaseProps {
   projects?: ProjectShowcaseItem[]
   totalProjectCount?: number
-  heading?: string
-  subheading?: string
   className?: string
   viewAllHref?: string
 }
@@ -63,8 +61,6 @@ export interface ProjectShowcaseProps {
 export function ProjectShowcase({
   projects: customProjects,
   totalProjectCount,
-  heading = "Selected Works",
-  subheading = "Curated Engineering & Design",
   className = "",
   viewAllHref = "/projects",
 }: ProjectShowcaseProps) {
@@ -206,38 +202,28 @@ export function ProjectShowcase({
       data-project-showcase="true"
       className={`relative w-full py-6 md:py-10 min-h-[85vh] flex flex-col justify-center select-none ${className}`}
     >
-      {/* Header bar - with subtle Warm Linen editorial accents */}
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-24 mb-6 sm:mb-8 border-b border-[#F4EFE7]/15 pb-5">
+      {/* Header: title + a single quiet "Explore All" link. No bottom rule: the list below owns the top divider. */}
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-24 mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#F4EFE7] animate-pulse" />
-              <span className="text-xs font-mono font-semibold uppercase tracking-[0.25em] text-[#F4EFE7] bg-[#F4EFE7]/10 border border-[#F4EFE7]/20 px-2 py-0.5 rounded-full">
-                {heading}
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white">
-              Featured Projects
-            </h2>
-          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white">
+            Featured Projects
+          </h2>
 
-          <div className="flex items-center gap-4">
-            <p className="hidden md:block text-xs font-mono text-[#F4EFE7]/60">
-              {subheading}
-            </p>
-            <Link
-              href={viewAllHref}
-              className="group/cta inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F4EFE7]/20 bg-[#F4EFE7]/5 hover:bg-[#F4EFE7]/15 hover:border-[#F4EFE7]/50 text-xs font-semibold uppercase tracking-wider text-[#F4EFE7] transition-all duration-300"
-            >
-              <span>Explore All</span>
-              {totalProjectCount && (
-                <span className="px-2 py-0.5 rounded-full bg-[#F4EFE7] text-[#120820] font-bold text-[10px] tracking-normal shadow-sm">
+          <Link
+            href={viewAllHref}
+            className="group/cta inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#F4EFE7]/70 transition-colors duration-300 hover:text-[#F4EFE7]"
+          >
+            <span className="relative">
+              Explore All
+              {totalProjectCount ? (
+                <sup className="ml-1.5 text-[10px] tracking-normal text-[#F4EFE7]/50 transition-colors duration-300 group-hover/cta:text-[#F4EFE7]">
                   {totalProjectCount}
-                </span>
-              )}
-              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5 text-[#F4EFE7]" />
-            </Link>
-          </div>
+                </sup>
+              ) : null}
+              <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-[#F4EFE7] transition-all duration-300 ease-out group-hover/cta:w-full" />
+            </span>
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
+          </Link>
         </div>
       </div>
 
@@ -303,17 +289,12 @@ export function ProjectShowcase({
             onMouseLeave={handleMouseLeave}
           >
             <div className="relative w-full py-5 sm:py-7 lg:py-8.5 px-6 sm:px-12 md:px-16 lg:px-20 xl:px-24 transition-colors duration-300 ease-out">
-              {/* Bold Inversion Slab on Hover: Solid Warm Cream (#F4EFE7) with Top/Bottom Borders */}
+              {/* Inversion slab on hover: solid Warm Cream. No borders of its own, so it never doubles the list dividers. */}
               <div
                 className={`
                   absolute inset-0 w-full pointer-events-none transition-all duration-300 ease-out
-                  border-t border-b border-l-0 border-r-0
-                  group-hover:bg-[#F4EFE7] group-hover:border-[#120820]/20 group-hover:opacity-100
-                  ${
-                    hoveredIndex === index
-                      ? "bg-[#F4EFE7] border-[#120820]/20 opacity-100"
-                      : "bg-transparent border-transparent opacity-0"
-                  }
+                  group-hover:bg-[#F4EFE7] group-hover:opacity-100
+                  ${hoveredIndex === index ? "bg-[#F4EFE7] opacity-100" : "bg-transparent opacity-0"}
                 `}
               />
 
@@ -449,20 +430,6 @@ export function ProjectShowcase({
         ))}
       </div>
 
-      {/* Footer bar for showcase - with Warm Linen accents */}
-      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-20 xl:px-24 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-[#F4EFE7]" />
-          <span className="text-[#F4EFE7]/70">Hover rows to reveal live preview snapshots</span>
-        </div>
-        <Link
-          href={viewAllHref}
-          className="text-[#F4EFE7]/70 hover:text-[#F4EFE7] transition-colors duration-200 inline-flex items-center gap-1.5"
-        >
-          <span>View complete project archives</span>
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </Link>
-      </div>
     </section>
   )
 }
