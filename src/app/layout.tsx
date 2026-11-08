@@ -13,7 +13,7 @@ const plus_jakarta_sans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Raditazar | Portfolio",
-  description: "Portfolio of Raditazar - Front-End Developer & AI Enthusiast",
+  description: "Portfolio of Raditazar - Data & Backend Integration, AI agent systems",
   icons: {
     icon: "/assets/logo_only.png",
     apple: "/assets/logo_only.png",
