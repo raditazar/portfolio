@@ -61,7 +61,7 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (!isVisible || pathname === "/") return null;
+  if (!isVisible || pathname === "/" || pathname?.startsWith("/admin")) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none">

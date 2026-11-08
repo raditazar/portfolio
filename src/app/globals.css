@@ -39,14 +39,9 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* Hero-Anchored Plum Noir System */
-  --color-canvas-base: #0E0717;
-  --color-canvas-hero: #120820;
-  --color-canvas-surface: #170C28;
   --color-canvas-border: rgba(255, 255, 255, 0.08);
   --color-text-white: #FFFFFF;
   --color-text-muted: rgba(255, 255, 255, 0.75);
-  --color-cream-sheet: #F4EFE7;
-  --color-cream-ink: #120820;
 
   /* Portfolio custom colors */
   --portfolio-bg: #0E0717;
@@ -115,16 +110,18 @@ html.lenis, html.lenis body {
   animation-fill-mode: both;
 }
 
-.fade-in {
-  animation-name: fade-in;
-}
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation-name: fade-in;
+  }
 
-.slide-in-from-bottom-4 {
-  animation-name: slide-in-from-bottom;
-}
+  .slide-in-from-bottom-4 {
+    animation-name: slide-in-from-bottom;
+  }
 
-.slide-in-from-right-8 {
-  animation-name: slide-in-from-right;
+  .slide-in-from-right-8 {
+    animation-name: slide-in-from-right;
+  }
 }
 
 .duration-1000 {
@@ -133,6 +130,20 @@ html.lenis, html.lenis body {
 
 .delay-300 {
   animation-delay: 300ms;
+}
+
+@theme {
+  --color-canvas-base: #0E0717;
+  --color-canvas-hero: #120820;
+  --color-canvas-surface: #170C28;
+  --color-canvas-raised: #1F1135;
+  --color-cream-sheet: #F4EFE7;
+  --color-cream-ink: #120820;
+  --color-accent-emerald: #34D399;
+  --color-accent-violet: #A855F7;
+  --color-danger: #F87171;
+  --color-danger-surface: #2A0F1C;
+  --color-hairline: rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
@@ -227,30 +238,6 @@ html.lenis, html.lenis body {
   }
 }
 
-/* Admin form inputs */
-.admin-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background-color: rgb(39 39 42); /* zinc-800 */
-  border: 1px solid rgb(63 63 70); /* zinc-700 */
-  color: white;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-  outline: none;
-}
-.admin-input::placeholder {
-  color: rgb(113 113 122); /* zinc-500 */
-}
-.admin-input:focus {
-  ring: 2px;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px rgb(168 85 247); /* purple-500 */
-}
-.admin-input option {
-  background-color: rgb(39 39 42);
-  color: white;
-}
 /* Hide scrollbar globally */
 html, body {
   scrollbar-width: none;
@@ -258,6 +245,25 @@ html, body {
 }
 html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
+}
+
+/* Admin scope: restore thin scrollbar */
+.admin-root, .admin-root * {
+  scrollbar-width: thin;
+  scrollbar-color: #2a1a45 #0E0717;
+  -ms-overflow-style: auto;
+}
+.admin-root::-webkit-scrollbar, .admin-root *::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+.admin-root::-webkit-scrollbar-thumb, .admin-root *::-webkit-scrollbar-thumb {
+  background: #2a1a45;
+  border-radius: 4px;
+}
+.admin-root::-webkit-scrollbar-track, .admin-root *::-webkit-scrollbar-track {
+  background: #0E0717;
 }
 
 /* Liquid blob morph for row hover (impact-experience) */

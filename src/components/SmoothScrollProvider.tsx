@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,9 +20,12 @@ export default function SmoothScrollProvider({
   children: React.ReactNode;
 }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin") ?? false;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (isAdmin) return;
 
     // Accessibility: skip smooth inertia scroll if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia(
@@ -69,7 +73,7 @@ export default function SmoothScrollProvider({
         window.__lenis = null;
       }
     };
-  }, []);
+  }, [isAdmin]);
 
   return <>{children}</>;
 }
