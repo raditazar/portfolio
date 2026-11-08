@@ -6,7 +6,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
   const isLoginPage = pathname === "/admin";
-  const isAuthenticated = !!req.auth;
+  const isAuthenticated = !!req.auth?.user;
 
   if (!isLoginPage && !isAuthenticated) {
     return Response.redirect(new URL("/admin", req.url));
