@@ -1,20 +1,24 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { ensureContentDefaults } from "./content-bootstrap";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create admin user
-  const hashedPassword = await hash("misterradit15", 12);
-  await prisma.user.upsert({
-    where: { email: "radityaazhar@gmail.com" },
-    update: { password: hashedPassword, email: "radityaazhar@gmail.com" },
-    create: {
-      email: "radityaazhar@gmail.com",
-      password: hashedPassword,
-      name: "Raditazar",
-    },
-  });
+  // Admin user: credentials come from the environment, never from source.
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  if (email && password) {
+    const hashedPassword = await hash(password, 12);
+    await prisma.user.upsert({
+      where: { email },
+      update: { password: hashedPassword },
+      create: { email, password: hashedPassword, name: "Raditazar" },
+    });
+    console.log(`Admin user ensured: ${email}`);
+  } else {
+    console.log("ADMIN_EMAIL / ADMIN_PASSWORD not set - skipping admin user.");
+  }
 
   // Create projects
   const projects = [
@@ -72,8 +76,10 @@ async function main() {
     },
   ];
 
+  // Idempotent: only create projects that do not exist yet (matched by title).
   for (const project of projects) {
-    await prisma.project.create({ data: project });
+    const exists = await prisma.project.findFirst({ where: { title: project.title } });
+    if (!exists) await prisma.project.create({ data: project });
   }
 
   // Create career entries
@@ -114,77 +120,14 @@ async function main() {
   ];
 
   for (const career of careers) {
-    await prisma.careerEntry.create({ data: career });
-  }
-
-  // Create about info
-  const aboutInfos = [
-    { key: "intro_name", value: "Raditya Azhar Ananta" },
-    { key: "intro_location", value: "Yogyakarta" },
-    {
-      key: "intro_bio",
-      value:
-        "An Information Engineering student who treats code as a creative medium.",
-    },
-    {
-      key: "intro_bio_2",
-      value:
-        "Previously leading a team as a student organization head, I learned how to bridge technical execution with human empathy. My goal isn't just to build websites, but to build digital experiences that feel natural and intuitive.",
-    },
-    {
-      key: "currently_exploring_title",
-      value: "AI & Machine Learning Bootcamp",
-    },
-    {
-      key: "currently_exploring_desc",
-      value:
-        "Deep diving into Large Language Models (LLM) and integrating Vercel AI SDK with Next.js. Building a bridge between prompt engineering and UI components to create smarter web applications.",
-    },
-    { key: "currently_exploring_progress", value: "66" },
-    {
-      key: "technologies",
-      value:
-        "JavaScript (ES6+),TypeScript,React & Next.js,Tailwind CSS,Wagmi,Solidity,Python,Figma",
-    },
-    { key: "stat_years", value: "2+" },
-    { key: "stat_projects", value: "10+" },
-    { key: "stat_technologies", value: "8+" },
-  ];
-
-  for (const info of aboutInfos) {
-    await prisma.aboutInfo.upsert({
-      where: { key: info.key },
-      update: { value: info.value },
-      create: info,
+    const exists = await prisma.careerEntry.findFirst({
+      where: { title: career.title, organization: career.organization },
     });
+    if (!exists) await prisma.careerEntry.create({ data: career });
   }
 
-  // Create site settings
-  const settings = [
-    { key: "site_name", value: "Raditazar" },
-    { key: "site_tagline", value: "Front-End Developer & AI Enthusiast" },
-    { key: "email", value: "radityaazhar@gmail.com" },
-    {
-      key: "github_url",
-      value: "https://github.com/raditazar",
-    },
-    {
-      key: "linkedin_url",
-      value: "https://www.linkedin.com/in/raditya-azhar-ananta",
-    },
-    {
-      key: "instagram_url",
-      value: "https://instagram.com/raditazar_",
-    },
-  ];
-
-  for (const setting of settings) {
-    await prisma.siteSetting.upsert({
-      where: { key: setting.key },
-      update: { value: setting.value },
-      create: setting,
-    });
-  }
+  // Profile / socials / gallery (only when missing - never overwrite admin edits)
+  await ensureContentDefaults(prisma);
 
   console.log("✅ Seed completed successfully!");
 }

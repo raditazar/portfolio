@@ -49,6 +49,56 @@ model CareerEntry {
   updatedAt    DateTime @updatedAt
 }
 
+/// Singleton row (id = "main"): identity, hero copy, bio, stats shown across the public site.
+model Profile {
+  id                   String   @id @default("main")
+  name                 String
+  title                String
+  location             String
+  bio                  String
+  bio2                 String   @default("")
+  heroHeadlineTop      String   @default("Quietly")
+  heroHeadlineBottom   String   @default("Building")
+  heroTagline          String   @default("")
+  heroFocusTitle       String   @default("")
+  heroFocusSince       String   @default("")
+  heroImage            String   @default("/images/hero.png")
+  exploringTitle       String   @default("")
+  exploringDescription String   @default("")
+  exploringProgress    Int      @default(0)
+  statYears            String   @default("")
+  statProjects         String   @default("")
+  statTechnologies     String   @default("")
+  technologies         String[]
+  cvUrl                String?
+  updatedAt            DateTime @updatedAt
+}
+
+model SocialLink {
+  id           String   @id @default(cuid())
+  label        String
+  kind         String   @default("other")
+  url          String
+  showInNavbar Boolean  @default(true)
+  showInHero   Boolean  @default(true)
+  showInFooter Boolean  @default(true)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  src       String
+  alt       String
+  title     String
+  caption   String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Legacy key/value stores. Superseded by Profile / SocialLink; kept until data is verified migrated.
 model AboutInfo {
   id    String @id @default(cuid())
   key   String @unique
