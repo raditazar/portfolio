@@ -18,6 +18,7 @@ export default async function AdminProjectsPage() {
     createdAt: Date;
     liveUrl: string | null;
   }[] = [];
+  let loadFailed = false;
 
   try {
     projects = await prisma.project.findMany({
@@ -32,8 +33,10 @@ export default async function AdminProjectsPage() {
         liveUrl: true,
       },
     });
-  } catch {
-    // DB not ready
+  } catch (err) {
+    // Never present a failed query as "no projects yet".
+    console.error("Failed to load projects", err);
+    loadFailed = true;
   }
 
   return (
@@ -52,7 +55,12 @@ export default async function AdminProjectsPage() {
         }
       />
 
-      {projects.length === 0 ? (
+      {loadFailed ? (
+        <EmptyState
+          title="Could not load projects"
+          description="Check the database connection and refresh."
+        />
+      ) : projects.length === 0 ? (
         <EmptyState
           title="No projects yet"
           description="Add your first case study to get started."

@@ -225,6 +225,7 @@ export default function AdminAboutPage() {
                     value={form.heroImage}
                     onChange={(url) => set("heroImage", url)}
                     disabled={saving}
+                    removable={false}
                   />
                 )}
               </Field>

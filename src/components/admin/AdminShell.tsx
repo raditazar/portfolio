@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Dialog } from "radix-ui";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 type NavItem = { href: string; label: string };
 
@@ -114,9 +114,25 @@ export default function AdminShell({ email, children }: AdminShellProps) {
     setDrawerOpen(false);
   }
 
+  // The drawer is hidden from lg up; close it there so its focus trap is released.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setDrawerOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false });
+    } catch (err) {
+      console.error("Sign out failed", err);
+    }
+    // Middleware sends a still-valid session back to the dashboard.
     router.push("/admin");
+    router.refresh();
   };
 
   const currentLabel = navItems.find((item) =>
@@ -136,7 +152,6 @@ export default function AdminShell({ email, children }: AdminShellProps) {
               <Dialog.Trigger asChild>
                 <button
                   type="button"
-                  aria-label="Open navigation"
                   className={`flex items-center gap-3 text-white/60 hover:text-white lg:hidden ${focusRing}`}
                 >
                   <span className="font-mono text-xs uppercase tracking-widest">

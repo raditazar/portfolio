@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Dialog } from "radix-ui";
 import { Button } from "./Button";
 
@@ -28,6 +28,24 @@ export function ConfirmDialog({
   onConfirm,
 }: ConfirmDialogProps) {
   const actionsRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const busyRef = useRef(false);
+
+  // Both buttons are disabled while loading; park focus on the dialog so it is not lost.
+  useEffect(() => {
+    if (loading) contentRef.current?.focus();
+  }, [loading]);
+
+  // Ignore repeat activations until the first confirm settles.
+  const handleConfirm = async () => {
+    if (busyRef.current) return;
+    busyRef.current = true;
+    try {
+      await onConfirm();
+    } finally {
+      busyRef.current = false;
+    }
+  };
 
   return (
     <Dialog.Root
@@ -40,6 +58,7 @@ export function ConfirmDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[90] bg-black/70 animate-in fade-in motion-reduce:animate-none" />
         <Dialog.Content
+          ref={contentRef}
           className="fixed left-1/2 top-1/2 z-[91] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-canvas-surface p-8 animate-in fade-in motion-reduce:animate-none"
           onOpenAutoFocus={(e) => {
             e.preventDefault();
@@ -76,7 +95,7 @@ export function ConfirmDialog({
             <Button
               variant={tone === "danger" ? "danger" : "primary"}
               loading={loading}
-              onClick={() => void onConfirm()}
+              onClick={() => void handleConfirm()}
             >
               {confirmLabel}
             </Button>

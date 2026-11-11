@@ -19,19 +19,24 @@ export default function DeleteProjectButton({
   const router = useRouter();
   const { toast } = useToast();
 
+  // Returns a promise so ConfirmDialog can ignore repeat clicks until it settles.
   function handleConfirm() {
-    startTransition(async () => {
-      try {
-        await deleteProject(id);
-        setOpen(false);
-        toast("Project deleted", { tone: "success" });
-        router.refresh();
-      } catch (err) {
-        toast(
-          err instanceof Error ? err.message : "Failed to delete project",
-          { tone: "error" },
-        );
-      }
+    return new Promise<void>((resolve) => {
+      startTransition(async () => {
+        try {
+          await deleteProject(id);
+          setOpen(false);
+          toast("Project deleted", { tone: "success" });
+          router.refresh();
+        } catch (err) {
+          toast(
+            err instanceof Error ? err.message : "Failed to delete project",
+            { tone: "error" },
+          );
+        } finally {
+          resolve();
+        }
+      });
     });
   }
 

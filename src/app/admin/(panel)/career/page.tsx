@@ -53,7 +53,14 @@ export default function AdminCareerPage() {
     try {
       const res = await apiRequest<CareerEntry[]>("/api/about/career", "GET");
       if (!res.ok || !res.data) throw new Error("Failed to load");
-      setEntries(res.data);
+      // Nullable DB columns must not reach controlled inputs as null.
+      setEntries(
+        res.data.map((e) => ({
+          ...e,
+          endDate: e.endDate ?? "",
+          description: e.description ?? "",
+        })),
+      );
     } catch {
       setLoadError(true);
     } finally {

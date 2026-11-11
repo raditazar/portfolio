@@ -17,6 +17,8 @@ interface ImageUploadProps {
   "aria-describedby"?: string;
   "aria-invalid"?: boolean | "true" | "false";
   disabled?: boolean;
+  /** Hide "Remove" for required images (an empty value would fail validation). */
+  removable?: boolean;
 }
 
 export default function ImageUpload({
@@ -26,6 +28,7 @@ export default function ImageUpload({
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
   disabled,
+  removable = true,
 }: ImageUploadProps) {
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -116,7 +119,7 @@ export default function ImageUpload({
         >
           {uploading ? "Uploading…" : "Upload image"}
         </Button>
-        {value && (
+        {removable && value && (
           <Button
             variant="ghost"
             size="sm"
