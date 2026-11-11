@@ -99,7 +99,14 @@ export function TagInput({
         placeholder={placeholder}
         aria-describedby={ariaDescribedBy}
         aria-invalid={ariaInvalid}
-        onChange={(e) => setDraft(e.target.value)}
+        onChange={(e) => {
+          // Mobile keyboards often skip keydown for ",", so split here as well.
+          const text = e.target.value;
+          if (!text.includes(",")) return setDraft(text);
+          const parts = text.split(",");
+          setDraft(parts.pop() ?? "");
+          commit(parts);
+        }}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onBlur={commitDraft}
