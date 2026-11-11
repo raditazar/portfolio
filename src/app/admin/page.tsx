@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
             as="h1"
             wrapperClassName="w-fit"
             className="font-serif font-black text-white text-[clamp(3rem,8vw,7rem)] leading-[0.95]"
-            rect={{ top: "55%", left: "-0.1em", right: "-0.1em", bottom: "0.05em" }}
+            rect={{ top: "40%", left: "-0.1em", right: "-0.1em", bottom: "0.05em" }}
           >
             Back.
           </SplitHighlight>

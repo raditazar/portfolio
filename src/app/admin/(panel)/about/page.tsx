@@ -142,7 +142,9 @@ export default function AdminAboutPage() {
     }
   };
 
-  const sectionClass = "border-t border-white/8 pt-8 flex flex-col gap-6";
+  // First section sits right under the PageHeader rule, so it skips its own.
+  const sectionClass =
+    "border-t border-white/8 pt-8 flex flex-col gap-6 first:border-t-0 first:pt-0";
   const headingClass =
     "font-mono text-xs uppercase tracking-widest text-white/50";
 

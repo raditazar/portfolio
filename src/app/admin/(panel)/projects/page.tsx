@@ -88,12 +88,7 @@ export default async function AdminProjectsPage() {
                 {project.isFeatured && <Tag tone="linen">Featured</Tag>}
               </div>
               <div className="flex flex-wrap items-center gap-4 md:col-span-3 md:justify-end">
-                <Link
-                  href={`/admin/projects/${project.id}/edit`}
-                  className={buttonVariants({ variant: "ghost", size: "sm" })}
-                >
-                  Edit →
-                </Link>
+                {/* Optional link goes first so Edit / Delete stay aligned across rows. */}
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
@@ -107,6 +102,12 @@ export default async function AdminProjectsPage() {
                     View ↗
                   </a>
                 )}
+                <Link
+                  href={`/admin/projects/${project.id}/edit`}
+                  className={buttonVariants({ variant: "ghost", size: "sm" })}
+                >
+                  Edit →
+                </Link>
                 <DeleteProjectButton id={project.id} title={project.title} />
               </div>
             </li>
